@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Beiruti:wght@200..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+h1,
+h2,
+h3,
+h4,
+h6 {
+    transition: .4s;
+    font-family: "Alexandria", sans-serif;
+}
+
+i {
+    transition: .1s !important;
+}
+
+label,
+a,
+p {
+    font-family: "Beiruti", sans-serif;
+    font-weight: 600;
+}
+
+a.active {
+    color: white;
+    background-color: #0069D2;
+}
