@@ -32,7 +32,13 @@ const AdminLayout = () => {
                             <i className="pi pi-chart-pie font-bold text-2xl ms-1"></i>
                             <span className="ms-3">لوحة التحكم</span>
                         </NavLink>
-
+                        <NavLink
+                            to='/rooms/manage'
+                            className="flex items-center p-2 text-gray-900 rounded-lg group"
+                        >
+                            <i className="pi pi-building font-bold text-2xl ms-1"></i>
+                            <span className="ms-3">عرض الغرف</span>
+                        </NavLink>
                         <NavLink
                             to='/rooms'
                             className="flex items-center p-2 text-gray-900 rounded-lg group"
@@ -44,12 +50,26 @@ const AdminLayout = () => {
                             to='/users'
                             className="flex items-center p-2 text-gray-900 rounded-lg group"
                         >
+                            <i className="pi pi-users font-bold text-2xl ms-1"></i>
+                            <span className="ms-3">عرض المستخدمين</span>
+                        </NavLink>
+                        <NavLink
+                            to='/users'
+                            className="flex items-center p-2 text-gray-900 rounded-lg group"
+                        >
                             <i className="pi pi-user-plus font-bold text-2xl ms-1"></i>
                             <span className="ms-3">إضافة مستخدم</span>
                         </NavLink>
+                        <NavLink
+                            to='/reports/manage'
+                            className="flex items-center p-2 text-gray-900 rounded-lg group"
+                        >
+                            <i className="pi pi-flag font-bold text-2xl ms-1"></i>
+                            <span className="ms-3">الشكاوى</span>
+                        </NavLink>
                         <button onClick={logout} className="flex items-center p-2 text-gray-900 rounded-lg group">
-                            <i className="pi pi-sign-out text-3xl"></i>
-                            <span className="ms-3">تسجيل الخروج</span>
+                            <i className="pi pi-sign-out text-2xl"></i>
+                            <span className="ms-4 font-semibold">تسجيل الخروج</span>
                         </button>
                     </ul>
                 </div>

@@ -18,7 +18,8 @@ import AdminLayout from './Admin/AdminLayout';
 import Dashboard from './Admin/Dashboard';
 import AddRooms from './Admin/AddRooms';
 import AddUsers from './Admin/AddUsers';
-
+import ManageReports from './Admin/ManageReports';
+import DetailsReport from './Admin/DetailsReport';
 // Helper function to check if user is a super admin
 const isSuperAdmin = (user) => user && user.roles && user.roles.includes('SuperAdmin');
 
@@ -55,6 +56,8 @@ function App() {
               <Route path="dashboard" element={user ? <Dashboard /> : <Navigate to="/" />} />
               <Route path="rooms" element={<AddRooms />} />
               <Route path="users" element={<AddUsers />} />
+              <Route path="/reports/manage" element={<ManageReports />} />
+              <Route path="/reports/:id" element={<DetailsReport />} />
             </Route>
           }
         </Routes>

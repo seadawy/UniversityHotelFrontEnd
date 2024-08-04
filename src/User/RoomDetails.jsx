@@ -74,6 +74,14 @@ export default function RoomDetails() {
     }
 
     //Send Request
+    const [success, setSucess] = useState(false);
+    const [err, setErr] = useState(false);
+    useEffect(() => {
+        setTimeout(() => {
+            setSucess(false);
+            setErr(false);
+        }, 5000)
+    }, [success, err]);
     const handelRequestForm = (e) => {
         e.preventDefault();
         const data = {
@@ -88,10 +96,16 @@ export default function RoomDetails() {
             },
             body: JSON.stringify(data)
         }).then(res => res.json()).then(data => {
-            console.log(data);
+            setSucess(true);
         }).catch(err => {
             console.error(err);
-        });
+            setErr(true);
+        }).finally(() => {
+            setPrice('');
+            setBill('');
+            setDateRange(null);
+            setNdays('');
+        })
     }
 
     return (
@@ -153,9 +167,26 @@ export default function RoomDetails() {
                 </div>
             }
             <div className='flex justify-between px-8 my-5 gap-2'>
-                <div className='bg-blue-200 flex flex-col items-center rounded-md shadow p-5 w-2/6'>
-                    <h2 className='text-center text-2xl font-bold mb-5'>تفاصيل الحجز</h2>
-                    <form action="" onSubmit={(e) => handelRequestForm(e)}>
+                <div className='bg-blue-200 relative flex flex-col items-center rounded-md shadow p-5 w-2/6'>
+                    <h2 className='text-center text-2xl font-bold mb-5'>  إرسال طلب حجز </h2>
+                    {success && <div className='absolute bg-green-400 top-0 rounded-md shadow flex flex-col justify-center items-center w-full h-full gap-5'>
+                        <i className='pi pi-verified text-8xl text-white'></i>
+                        <span className='text-2xl font-semibold text-white'>
+                            تم ارسال طلبك
+                        </span>
+                        <span className='text-xl font-semibold text-center text-white'>تابع طلبك من خلال
+                            <br />صفحة الطلبات</span>
+                    </div>}
+                    {err && <div className='absolute bg-red-400 top-0 rounded-md shadow flex flex-col justify-center items-center w-full h-full gap-5'>
+                        <i className='pi pi-times text-8xl text-white'></i>
+                        <span className='text-2xl font-semibold text-white'>
+                            فشل فى الارسال
+                        </span>
+                        <span className='text-lg font-semibold text-center text-white'>
+                            يجب اختار فتره لا تحتوى<br /> على ايام محجوزه
+                        </span>
+                    </div>}
+                    <form action="" className='' onSubmit={(e) => handelRequestForm(e)}>
                         <div className='flex items-center mb-3'>
                             <label htmlFor="ndays" className='text-2xl me-5'> عدد الايام المحجوزه </label>
                             <input type="text" id='ndays' className='bg-gray-100 border-prime shadow border-2 p-2 rounded-xl w-28 text-center text-2xl' disabled value={ndays} />

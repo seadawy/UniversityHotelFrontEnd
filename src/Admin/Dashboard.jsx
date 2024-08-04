@@ -29,7 +29,7 @@ const Dashboard = () => {
                     {<span className='absolute top-2 left-3 bg-red-500 px-1.5 py-1 rounded-full text-white'>{nComp}</span>}
 
                 </Link>
-                <Link className='bg-red-200  hover:bg-gray-400 hover:text-white py-8 relative rounded-md shadow flex gap-4 flex-col items-center'>
+                <Link to="/reports/manage" className='bg-red-200  hover:bg-gray-400 hover:text-white py-8 relative rounded-md shadow flex gap-4 flex-col items-center'>
                     <i className='pi pi-flag font-light text-6xl'></i>
                     <h2 className='text-red-950 font-bold'>الشكاوى</h2>
                     {<span className='absolute top-2 left-3 bg-red-500 px-1.5 py-1 rounded-full text-white'>{nReq}</span>}

@@ -52,7 +52,7 @@ export default function Login() {
                     <form onSubmit={(e) => submitFormHandeling(e)} className="space-y-6">
                         <div>
                             <label htmlFor="email" className="block text-lg font-bold leading-6 text-gray-900">
-                                الايميل الالكترونى
+                                البريد الالكترونى
                             </label>
                             <div className="mt-2">
                                 <input
