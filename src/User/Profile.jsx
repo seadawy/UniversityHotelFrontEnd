@@ -40,18 +40,20 @@ export default function Profile() {
 
     const [errors, setErrors] = useState({});
 
-    const [selectedGender, setSelectedGender] = useState('');
-    const handleGenderChange = (event) => {
-        setSelectedGender(event.target.value);
-    };
-
     const handleSubmitPersonalInfo = (e) => {
         e.preventDefault();
+        const data = new FormData();
+        data.append("FullName", FullName);
+        data.append("Email", Email);
+        data.append("PhoneNumber", PhoneNumber);
+        data.append("Address", Address);
+
         fetch('/api/HotelAuth/updateUserData', {
             method: 'PUT',
             headers: {
                 "authorization": `Bearer ${token}`
-            }
+            },
+            body: data
         }).then(res => res.json()).then((data) => {
             setRefresh(!refresh)
         }).catch(err => console.log(err));

@@ -40,3 +40,40 @@ a.active {
     color: white;
     background-color: #0069D2;
 }
+
+.p-datepicker-today span {
+    border: 2px solid red;
+}
+
+.p-datepicker-inline {
+    background-color: #dde9f6;
+}
+
+.p-datepicker-inline .p-datepicker-current-day {
+    background-color: "#004b6f";
+}
+
+span[data-p-highlight="true"] {
+    background-color: #004b6f;
+    color: white;
+}
+
+span[data-p-disabled="true"] {
+    background-color: rgb(171, 171, 171);
+}
+
+
+/* table */
+.p-datatable-wrapper {
+    border-radius: 8px;
+    box-shadow: 0 0 5px 0px #004b6f;
+}
+
+.p-datatable {
+    padding: 20px 25px;
+}
+
+.p-column-title {
+    text-align: center;
+    width: -webkit-fill-available;
+}

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Calendar } from 'primereact/calendar';
 import { Galleria } from 'primereact/galleria';
@@ -7,11 +6,14 @@ import { FaRegSnowflake } from "react-icons/fa";
 import { MdMeetingRoom } from "react-icons/md";
 import { IoMdBed } from "react-icons/io";
 import { FaLocationDot } from "react-icons/fa6";
+import { useAuthContext } from '../Auth/useAuthContext';
 
 export default function RoomDetails() {
+    const { token } = useAuthContext();
     const [room, setRoom] = useState(null);
     const [price, setPrice] = useState(0);
-    const [date, setDate] = useState(null);
+    const today = new Date();
+
     const [invalidDates, setInvalidDates] = useState([
         new Date("2024/8/20"),
     ])
@@ -21,7 +23,7 @@ export default function RoomDetails() {
             setRoom(data)
             setPrice(data.price);
         }).catch(err => console.error(err));
-    }, []);
+    }, [id]);
 
     const itemTemplate = (item) => {
         return (
@@ -36,17 +38,16 @@ export default function RoomDetails() {
         );
     }
 
-
     //Request Handeling
-    const [ndays, setNdays] = useState(4);
+    const [ndays, setNdays] = useState(0);
     const [bill, setBill] = useState(0);
-    const [dateRange, setDateRange] = useState([null, null]);
+    const [dateRange, setDateRange] = useState(null);
 
     // Format the selected date for display
     const formatDate = (date) => {
         if (!date) return '';
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
+        return date.toLocaleDateString('ar', options);
     };
 
     // Calculate the number of days between two dates
@@ -58,15 +59,46 @@ export default function RoomDetails() {
 
     // Update the bill whenever the date range or price changes
     useEffect(() => {
-        const days = calculateDays(dateRange[0], dateRange[1]);
-        setBill(price * days);
+        if (dateRange) {
+            const days = calculateDays(dateRange[0], dateRange[1]);
+            setNdays(days)
+            setBill(price * days);
+        }
     }, [price, dateRange])
+
+    // Format the date to YYYY-MM-DD
+    const formatDateForRequest = (date) => {
+        const offset = date.getTimezoneOffset();
+        const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+        return adjustedDate.toISOString().split('T')[0];
+    }
+
+    //Send Request
+    const handelRequestForm = (e) => {
+        e.preventDefault();
+        const data = {
+            "roomId": id,
+            "startDate": formatDateForRequest(dateRange[0]),
+            "endDate": formatDateForRequest(dateRange[1])
+        }
+        fetch('/api/BookRequests/AddBookRequest', {
+            method: 'post', headers: {
+                "authorization": `Bearer ${token}`,
+                "content-type": 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(res => res.json()).then(data => {
+            console.log(data);
+        }).catch(err => {
+            console.error(err);
+        });
+    }
+
     return (
         <>
             {room &&
                 <div className='flex flex-row-reverse w-full justify-between mt-20 px-8 gap-3'>
                     <div>
-
                         <Galleria
                             className='flex flex-1  '
                             value={room.images}
@@ -108,12 +140,14 @@ export default function RoomDetails() {
                             {room.numberOfBeds}
                         </h2>
                         <h2 className='bg-gray-200 rounded-md font-bold py-5 px-5 shadow h-fit w-full flex items-center'>
-                            <FaLocationDot className='text-2xl me-2' />
-                            المنطقة
+                            <i className='text-2xl me-2 pi-money-bill pi' />
+                            السعر
                             &ensp;
                             <i className='pi pi-angle-left text-xl'></i>
                             &ensp;
-                            {room.location}
+                            {room.price}
+                            &ensp;
+                            لليوم
                         </h2>
                     </div>
                 </div>
@@ -121,7 +155,7 @@ export default function RoomDetails() {
             <div className='flex justify-between px-8 my-5 gap-2'>
                 <div className='bg-blue-200 flex flex-col items-center rounded-md shadow p-5 w-2/6'>
                     <h2 className='text-center text-2xl font-bold mb-5'>تفاصيل الحجز</h2>
-                    <form action="" >
+                    <form action="" onSubmit={(e) => handelRequestForm(e)}>
                         <div className='flex items-center mb-3'>
                             <label htmlFor="ndays" className='text-2xl me-5'> عدد الايام المحجوزه </label>
                             <input type="text" id='ndays' className='bg-gray-100 border-prime shadow border-2 p-2 rounded-xl w-28 text-center text-2xl' disabled value={ndays} />
@@ -134,30 +168,30 @@ export default function RoomDetails() {
                         </div>
                         <div className='flex items-center mb-3'>
                             <label htmlFor="fromDate" className='text-2xl me-5'>من </label>
-                            <input
+                            {dateRange && <input
                                 type="text"
-                                id='fromDate'
+                                id='toDate'
                                 className='bg-gray-100 border-prime border-2 shadow p-2 rounded-xl w-60 text-center text-2xl'
                                 disabled
                                 value={formatDate(dateRange[0])}
-                            />
+                            />}
                         </div>
 
                         <div className='flex items-center mb-6'>
                             <label htmlFor="toDate" className='text-2xl me-5'>إلى</label>
-                            <input
+                            {dateRange && <input
                                 type="text"
                                 id='toDate'
                                 className='bg-gray-100 border-prime border-2 shadow p-2 rounded-xl w-60 text-center text-2xl'
                                 disabled
                                 value={formatDate(dateRange[1])}
-                            />
+                            />}
                         </div>
                         <button type='submit' className='bg-prime w-full py-3 rounded text-2xl text-white'>إرسال طلب حجز</button>
                     </form>
                 </div>
                 <div className='w-4/6 ps-5'>
-                    <Calendar className='w-full' value={date} onChange={(e) => setDateRange(e.value)} selectionMode="range" disabledDates={invalidDates} inline />
+                    <Calendar className='w-full' minDate={today} value={dateRange} onChange={(e) => setDateRange(e.value)} selectionMode="range" disabledDates={invalidDates} inline />
                 </div>
             </div>
         </>
