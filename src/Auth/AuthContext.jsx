@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, useReducer, useEffect, useState } from "react";
 
 export const AuthContext = createContext()
 
@@ -24,6 +24,8 @@ export const AuthContextProvider = ({ children }) => {
         token: null,
         user: null
     });
+
+    const [refresh, setRefresh] = useState(false);
     const login = (currentToken) => {
         fetch('/api/HotelAuth/user', {
             headers: {
@@ -39,7 +41,7 @@ export const AuthContextProvider = ({ children }) => {
         if (storageToken) {
             login(storageToken);
         }
-    }, [])
+    }, [refresh])
     console.log('AuthContext :', state);
 
     const logout = () => {
@@ -48,7 +50,7 @@ export const AuthContextProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ ...state, dispatch, login, logout }}>
+        <AuthContext.Provider value={{ ...state, dispatch, login, logout, refresh, setRefresh }}>
             {children}
         </AuthContext.Provider>
     )

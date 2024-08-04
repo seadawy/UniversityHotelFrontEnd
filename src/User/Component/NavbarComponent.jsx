@@ -21,14 +21,6 @@ const NavbarComponent = () => {
                         </NavLink>
                     </div>
                 )}
-                {/* {user &&
-                    <div className="flex items-center gap-2">
-                        <h1>welcome, {user.fullName}</h1>
-                        <img src={user.profilePic ? `http://localhost:5231/Users/PI/${user.profilePic}` : "img/defaultProfile.webp"}
-                            className="rounded-full w-12 h-12"
-                            alt="profilePic" />
-                    </div>
-                } */}
             </nav>
         </>
     );

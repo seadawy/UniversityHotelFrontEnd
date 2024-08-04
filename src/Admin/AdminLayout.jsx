@@ -1,6 +1,8 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
+import { useAuthContext } from "../Auth/useAuthContext";
 
 const AdminLayout = () => {
+    const { logout } = useAuthContext();
     return (
         <>
             <nav className="fixed top-0 z-50 w-full bg-prime-h border-gray-200 shadow">
@@ -19,12 +21,12 @@ const AdminLayout = () => {
             <aside
                 id="logo-sidebar"
                 className="fixed top-0 right-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full
-                bg-slider border-r border-gray-200 sm:translate-x-0"
+                bg-slider border-r border-gray-200 sm:translate-x-0 shadow-md"
             >
                 <div className="h-full px-3 pb-4 overflow-y-auto bg-slider">
                     <ul className="space-y-2 font-medium">
                         <NavLink
-                            to='/admin/dashboard'
+                            to='/dashboard'
                             className="flex items-center p-2 text-gray-900 rounded-lg group"
                         >
                             <i className="pi pi-chart-pie font-bold text-2xl ms-1"></i>
@@ -32,12 +34,23 @@ const AdminLayout = () => {
                         </NavLink>
 
                         <NavLink
-                            to='/admin/rooms'
+                            to='/rooms'
                             className="flex items-center p-2 text-gray-900 rounded-lg group"
                         >
                             <i className="pi pi-plus-circle font-bold text-2xl ms-1"></i>
                             <span className="ms-3">إضافة الغرف</span>
                         </NavLink>
+                        <NavLink
+                            to='/users'
+                            className="flex items-center p-2 text-gray-900 rounded-lg group"
+                        >
+                            <i className="pi pi-user-plus font-bold text-2xl ms-1"></i>
+                            <span className="ms-3">إضافة مستخدم</span>
+                        </NavLink>
+                        <button onClick={logout} className="flex items-center p-2 text-gray-900 rounded-lg group">
+                            <i className="pi pi-sign-out text-3xl"></i>
+                            <span className="ms-3">تسجيل الخروج</span>
+                        </button>
                     </ul>
                 </div>
             </aside>

@@ -5,7 +5,7 @@ export default function Profile() {
     const inputStyle = `block w-full rounded-md border-0 px-3 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`;
     const labelStyle = `block tracking-wide text-grey-darker text-base font-bold mb-2`;
 
-    const { user, token } = useAuthContext();
+    const { user, refresh, setRefresh, token } = useAuthContext();
 
     // Forms States
     const [activeForm, setActiveForm] = useState('personalInfo');
@@ -14,10 +14,15 @@ export default function Profile() {
 
     // Personal information
     const [FullName, setFullName] = useState('');
-    const [NationalId, setNationalId] = useState('');
     const [Email, setEmail] = useState('');
     const [PhoneNumber, setPhoneNumber] = useState('');
     const [Address, setAddress] = useState('');
+
+    // National information
+    const [NationalId, setNationalId] = useState('');
+    const [profile, setProfile] = useState('');
+    const [front, setFront] = useState('');
+    const [back, setBack] = useState('');
 
     useEffect(() => {
         // Personal information
@@ -28,7 +33,10 @@ export default function Profile() {
 
         // National information
         setNationalId(user.nationalId);
-    }, [personalState]);
+        setProfile(`http://localhost:5231/Users/PI/${user.profilePic}`);
+        setFront(`http://localhost:5231/Users/NI/${user.nationalPicFront}`);
+        setBack(`http://localhost:5231/Users/NI/${user.nationalPicBack}`);
+    }, [personalState, nationalState, user]);
 
     const [errors, setErrors] = useState({});
 
@@ -37,23 +45,56 @@ export default function Profile() {
         setSelectedGender(event.target.value);
     };
 
-    // Files
-    const [profile, setProfile] = useState(null);
-    const [front, setFront] = useState(`http://localhost:5231/Users/NI/${user.nationalPicFront}`);
-    const [back, setBack] = useState(`http://localhost:5231/Users/NI/${user.nationalPicBack}`);
-
     const handleSubmitPersonalInfo = (e) => {
         e.preventDefault();
-        /*        fetch('/api/HotelAuth/update',{       method: 'PUT',
+        fetch('/api/HotelAuth/updateUserData', {
+            method: 'PUT',
             headers: {
                 "authorization": `Bearer ${token}`
-            }}).then(res => res.json()).then((data) => {
-               }).catch(err => console.log(err)); */
+            }
+        }).then(res => res.json()).then((data) => {
+            setRefresh(!refresh)
+        }).catch(err => console.log(err));
     };
 
+    // Change Files
     const handleSubmitNationalInfo = (e) => {
         e.preventDefault();
+        const data = new FormData();
+        data.append('NationalId', NationalId);
+        data.append('ProfilePic', profile);
+        data.append('NationalIdPicFront', front);
+        data.append('NationalIdPicBack', back);
+
+        fetch('/api/HotelAuth/updateNationalData', {
+            method: 'PUT',
+            headers: {
+                "authorization": `Bearer ${token}`
+            },
+            body: data
+        }).then(res => res.json()).then((data) => {
+            setRefresh(!refresh)
+        }).catch(err => console.log(err));
     };
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setProfile(file);
+        }
+    };
+    const handleFrontFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFront(file);
+        }
+    };
+    const handleBackFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setBack(file);
+        }
+    };
+
 
     // Change Password
     const [oldpassword, setOldPassword] = useState('');
@@ -69,8 +110,6 @@ export default function Profile() {
         }
         setConfPassword(e.target.value);
     }
-
-
     const handleSubmitChangePassword = (e) => {
         e.preventDefault();
         const data = {
@@ -99,7 +138,7 @@ export default function Profile() {
             <div className="bg-white rounded shadow-md sm:px-16 h-fit py-10 sm:sticky sm:top-20 flex flex-col items-center justify-center sm:order-2 select-none">
                 <img
                     className="object-cover w-52 h-52 p-1 rounded-full ring-2 ring-prime-lh select-none"
-                    src={user.profilePic ? `http://localhost:5231/Users/PI/${user.profilePic}` : "img/defaultProfile.webp"}
+                    src={user.profilePic ? profile : "img/defaultProfile.webp"}
                     alt="Bordered avatar"
                 />
                 <div className="flex sm:flex-col gap-2 mt-5">
@@ -224,6 +263,30 @@ export default function Profile() {
                                 disabled={nationalState}
                             />
                         </div>
+                        <div className="mb-6">
+                            <label
+                                className={labelStyle}
+                                htmlFor="file_input"
+                            >
+                                الصورة الشخصية
+                            </label>
+                            <label htmlFor="file_input"
+                                className="block w-full rounded-md border-0 px-3 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 overflow-hidden" >
+                                <span className='bg-gray-300 p-4 -ms-3 mx-4'>اختار صوره</span>
+                                {front && front.name}
+                            </label>
+                            <input
+                                className="hidden"
+                                id="file_input"
+                                name="file_input"
+                                type="file"
+                                onChange={handleFileChange}
+                                disabled={nationalState}
+                            />
+                            {errors.NationalIdPicFront && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من اضافة صوره البطاقة</p>}
+                        </div>
+
                         <div className="-mx-3 md:flex mb-3">
                             {/* Front Card */}
                             <div className="md:w-1/2 px-3 mt-1">
@@ -244,6 +307,7 @@ export default function Profile() {
                                     id="file_input_front"
                                     name="file_input_front"
                                     type="file"
+                                    onChange={handleFrontFileChange}
                                     disabled={nationalState}
                                 />
                                 <img src={front} alt="front ID" className='mt-3 rounded shadow border-4 border-prime' />
@@ -266,6 +330,7 @@ export default function Profile() {
                                     id="file_input_back"
                                     name='file_input_back'
                                     type="file"
+                                    onChange={handleBackFileChange}
                                     disabled={nationalState}
                                 />
                                 <img src={back} alt="back ID" className='mt-3 rounded shadow border-4 border-prime' />
@@ -276,7 +341,7 @@ export default function Profile() {
                             <button
                                 type={(nationalState ? 'submit' : 'button')}
                                 className="text-white bg-prime-h hover:bg-prime-lh focus:ring-4 focus:outline-none float-end
-                            focus:ring-blue-700-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mb-5"
+                                focus:ring-blue-700-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mb-5"
                                 onClick={() => setNationalState(!nationalState)}
                             >
                                 {nationalState ? (<><i className='pi pi-pen-to-square'></i> تعديل</>) : (<><i className='pi pi-save'></i> حفظ</>)}
@@ -365,8 +430,6 @@ export default function Profile() {
                         </button>
                     </form>
                 )}
-
-
             </div>
         </div >
     );

@@ -12,7 +12,7 @@ const SidebarComponent = () => {
     return (
         <div className="relative">
             <button onClick={toggleSidebar} className="fixed flex items-center top-2.5 left-4 sm:hidden px-3 py-2 rounded-full bg-prime hover:bg-prime-h text-white z-50">
-               {isOpen? <i className="pi pi-times"></i>:<i className="pi pi-bars"></i>}
+                {isOpen ? <i className="pi pi-times"></i> : <i className="pi pi-bars"></i>}
             </button>
             <div className={`fixed sm:sticky sm:top-5 mt-12 -top-3 right-0 h-full sm:h-screen bg-slider shadow-md w-72 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full sm:translate-x-0'}`}>
                 <div className="sticky top-20 w-full py-8 flex items-center flex-col gap-3">
@@ -32,9 +32,9 @@ const SidebarComponent = () => {
                         <i className="pi pi-flag text-3xl"></i>
                         الشكاوى
                     </NavLink>
-                    <button onClick={logout} className={`${linkStyle} font-Beiruti font-semibold`}>
+                    <button onClick={logout} className={`${linkStyle} font-semibold`}>
                         <i className="pi pi-sign-out text-3xl"></i>
-                        تسجيل الخروج
+                        <span className="text-sm">تسجيل الخروج</span>
                     </button>
                 </div>
             </div>

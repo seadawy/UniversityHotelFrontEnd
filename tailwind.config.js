@@ -9,7 +9,7 @@ export default {
         prime: '#001F3F',
         'prime-h': '#004b6f',
         'prime-lh': '#007b8a',
-        slider: "gray",
+        slider: "#e0f7fa",
         white: '#FFFFFF',
         sand: '#C2B280',
         coral: '#FF7F50',

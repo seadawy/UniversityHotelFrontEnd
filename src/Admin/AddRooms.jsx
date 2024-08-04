@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone';
 import { useAuthContext } from "../Auth/useAuthContext";
+import { Message } from 'primereact/message';
 
 const AddRooms = () => {
     const { token } = useAuthContext();
@@ -26,8 +27,45 @@ const AddRooms = () => {
         setImages(acceptedFiles);
     }, [])
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+
+    const [sucess, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
+    useEffect(() => {
+        setTimeout(() => {
+            setSuccess(false);
+            setError(false);
+        }, 5000)
+    }, [sucess, error]);
     const submithandeling = (e) => {
         e.preventDefault();
+        const data = new FormData();
+        data.append("RoomNumber", RoomNumber);
+        data.append("NumberOfBeds", NumberOfBeds);
+        data.append("AirConditioned", AirConditioned);
+        data.append("Price", Price);
+        data.append("RegionId", RegionId);
+        images.forEach(file => {
+            data.append("Images", file);
+        });
+        fetch('/api/Rooms/AddRoom', {
+            method: "POST",
+            headers: {
+                "authorization": `Bearer ${token}`
+            },
+            body: data
+        }).then(res => res.json()).then((data) => {
+            if (data.errors || data.message) {
+                setError(true)
+            } else {
+                setSuccess(true);
+                setRoomNumber("");
+                setNumberOfBeds("");
+                setAirConditioned(false);
+                setPrice("");
+                setRegionId("");
+                setImages([]);
+            }
+        })
     };
 
     return (
@@ -41,7 +79,7 @@ const AddRooms = () => {
                 <span> إضافة غرفة جديده </span>
             </div>
             <div className="mt-5">
-                <form onSubmit={submithandeling} className="bg-white px-12 py-5 shadow">
+                <form onSubmit={submithandeling} className="relative bg-white px-12 py-5 shadow">
                     <h2 className="text-center text-3xl mb-10 font-bold">إضافة غرفة جديدة</h2>
                     <div className="flex gap-5 mb-6">
                         <div className="w-1/2">
@@ -114,7 +152,7 @@ const AddRooms = () => {
                             value={RegionId}
                             onChange={(e) => setRegionId(e.target.value)}
                         >
-                            <option className='text-xl' selected>اختار منطقه</option>
+                            <option className='text-xl' defaultValue>اختار منطقه</option>
                             {ragions && ragions.map((ele) => (
                                 <option className='text-xl' key={ele.id} value={ele.id}>{ele.name}</option>
                             ))}
@@ -125,22 +163,43 @@ const AddRooms = () => {
                         <div {...getRootProps()} className='bg-blue-50 p-5 rounded shadow mb-8 border-4 border-dashed border-prime'>
                             <input {...getInputProps()} />
                             <dir className="flex flex-col items-center gap-5">
-
-                                <div className='flex gap-5'>
+                                <div className='flex flex-wrap gap-5'>
                                     {
                                         isDragActive ? <>
                                             <i className='pi pi-image text-8xl text-gray-500'></i>
                                             <p className='text-center text-2xl font-alex tracking-wide font-Alex text-gray-500'>اضف هذه الملفات</p>
-                                        </> : (images ? images.map((ele) => (<img className=' h-28 max-w-40 shadow rounded-md border-2 border-prime' src={URL.createObjectURL(ele)} alt='room image' />))
+                                        </> : (images.length ? images.map((ele, index) => (<img className=' h-28 max-w-40 shadow rounded-md border-2 border-prime' key={index} src={URL.createObjectURL(ele)} alt='room image' />))
                                             : <p className='text-center text-2xl font-alex tracking-wide font-Alex text-gray-500'>اسحب الصور او اضغط لأختيار الصور</p>)
                                     }
                                 </div>
                             </dir>
                         </div>
                     </div>
-                    <div className='flex justify-end w-full'>
+                    <div className='relative flex w-full justify-end'>
+                        {sucess && <Message className="absolute border-teal-800 bg-teal-100 p-2 border-r-8 bottom-0 right-0 w-fit"
+                            severity="info"
+                            content={
+                                <div className="flex justify-start items-center">
+                                    <i className='pi pi-check-circle text-3xl mx-5'></i>
+                                    <div className="ml-2">تم اضافة الغرفه {RoomNumber} بنجاح</div>
+                                </div>
+                            }
+                        />}
+                        {error && <Message className="absolute border-red-800 bg-red-100 p-2 border-r-8 bottom-0 right-0 w-fit"
+                            severity="error"
+                            content={
+                                <div className="flex justify-start items-center">
+                                    <i className='pi pi-times text-3xl mx-5'></i>
+                                    <div className="ml-2">
+                                        <li>لم يتم اضافة الغرفه بسبب حدوث خطأ</li>
+                                        <li>تأكد من ملئ كل الحقول المطلوبه</li>
+                                    </div>
+                                </div>
+                            }
+                        />}
                         <button type="submit" className="mt-2 px-5 py-2 bg-prime text-white rounded-md hover:bg-prime-h">إضافة الغرفة</button>
                     </div>
+
                 </form>
             </div >
         </div >
