@@ -16,10 +16,11 @@ import RoomDetails from './User/RoomDetails';
 /* ADMIN */
 import AdminLayout from './Admin/AdminLayout';
 import Dashboard from './Admin/Dashboard';
-import AddRooms from './Admin/AddRooms';
+import RoomsAdd from './Admin/RoomsAdd';
 import AddUsers from './Admin/AddUsers';
-import ManageReports from './Admin/ManageReports';
-import DetailsReport from './Admin/DetailsReport';
+import ReportsManage from './Admin/ReportsManage';
+import ReportDetails from './Admin/ReportDetails';
+import RoomsManage from './Admin/RoomsManage';
 // Helper function to check if user is a super admin
 const isSuperAdmin = (user) => user && user.roles && user.roles.includes('SuperAdmin');
 
@@ -30,7 +31,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 100);
+    }, 0);
     setLoading(true);
   }, [user]);
 
@@ -54,15 +55,19 @@ function App() {
             <Route path="/" element={<AdminLayout />}>
               <Route index element={<Navigate to="dashboard" />} />
               <Route path="dashboard" element={user ? <Dashboard /> : <Navigate to="/" />} />
-              <Route path="rooms" element={<AddRooms />} />
+              {/* Rooms */}
+              <Route path="rooms" element={<RoomsAdd />} />
+              <Route path="rooms/manage" element={<RoomsManage />} />
+              {/* Users */}
               <Route path="users" element={<AddUsers />} />
-              <Route path="/reports/manage" element={<ManageReports />} />
-              <Route path="/reports/:id" element={<DetailsReport />} />
+              {/* Complains */}
+              <Route path="/reports/manage" element={<ReportsManage />} />
+              <Route path="/reports/:id" element={<ReportDetails />} />
             </Route>
           }
         </Routes>
       </Router >
-      <Sugar customLoading={loading} background="#fff" color="#007b8a" />
+      {/* <Sugar customLoading={loading} background="#fff" color="#007b8a" /> */}
     </>
   );
 }

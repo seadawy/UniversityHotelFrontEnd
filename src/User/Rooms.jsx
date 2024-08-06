@@ -41,7 +41,7 @@ export default function Rooms() {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
     return (
-        <div className="bg-white">
+        <div className="bg-white mt-10">
             <div>
                 {/* Mobile filter dialog */}
                 <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative z-40 lg:hidden">
@@ -119,7 +119,7 @@ export default function Rooms() {
                         </h2>
 
                         <div className="grid grid-cols-12 gap-x-8 gap-y-10 lg:grid-cols-4">
-                            <form className="hidden sm:block sm:sticky sm:top-20 h-fit">
+                            <form className="hidden sm:block sm:sticky sm:top-28 h-fit">
                                 {/* Rooms Time Filter */}
                                 <Disclosure as="div" className="border-b border-gray-200 py-6">
                                     {({ open }) => (
@@ -213,9 +213,9 @@ export default function Rooms() {
                             <div className="lg:col-span-3 col-span-full">
                                 <div className="border-gray-200 border-b pb-10 grid gap-y-10 xl:gap-x-4">
                                     {rooms && rooms.map((room) => (
-                                        <Link key={room.id} to={`/rooms/${room.id}`} className="group relative flex flex-col rounded-md hover:bg-gray-200 pb-5">
+                                        <Link key={room.id} to={`/rooms/${room.id}`} className="group relative flex flex-col rounded-md bg-indigo-50 hover:bg-gray-200 pb-5">
                                             <div className="overflow-hidden rounded-md max-h-80 bg-gray-200 group-hover:opacity-75">
-                                                <img src={`https://localhost:44356/Rooms/Images/${room.images[0].image}`} alt={room.Title} className="h-full w-full object-cover object-center" />
+                                                <img src={`http://localhost:5231/Rooms/Images/${room.images[0].image}`} alt={room.Title} className="h-full w-full object-cover object-center" />
                                             </div>
                                             <div className='flex justify-between mt-5 items-center px-3'>
                                                 <div>

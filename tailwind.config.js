@@ -6,34 +6,19 @@ export default {
   ], theme: {
     extend: {
       colors: {
-        prime: '#001F3F',
-        'prime-h': '#004b6f',
-        'prime-lh': '#007b8a',
-        slider: "#e0f7fa",
-        white: '#FFFFFF',
-        sand: '#C2B280',
-        coral: '#FF7F50',
-        span: '#36454F',
-        lightBlue: '#17718F',
-        lightGray: '#F0F0F0',
-        darkGray: '#333333',
+        prime: '#1B5AA5',
+        secondry: '#0069D2',
+        'prime-h': '#143C84',
+        'prime-lh': '#2C5F97',
+        slider: "#AFDCC4",
       },
       fontFamily: {
         'Beiruti': ["Beiruti", 'sans-serif'],
         'Alex': ["Alexandria", 'sans-serif'],
       }
       /* 
-    
-        lightBlue: '#ADD8E6',
-        slateGray: '#708090',
-      },
-      colors: {
-        beige: '#F5F5DC',
-        olive: '#556B2F',
-        whiteSmoke: '#F5F5F5',
-        darkBrown: '#654321',
-      },
-       */
+              
+ */
     },
   },
   plugins: [

@@ -1,4 +1,4 @@
-const ManageReports = () => {
+const ReportsManage = () => {
     return (
         <div className="p-20">
             <h2>table that have a list of complains with 2 action show and delete</h2>
@@ -6,4 +6,4 @@ const ManageReports = () => {
     );
 }
 
-export default ManageReports;
+export default ReportsManage;

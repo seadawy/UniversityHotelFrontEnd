@@ -3,7 +3,7 @@ import { useAuthContext } from '../Auth/useAuthContext';
 
 export default function Profile() {
     const inputStyle = `block w-full rounded-md border-0 px-3 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`;
-    const labelStyle = `block tracking-wide text-grey-darker text-base font-bold mb-2`;
+    const labelStyle = `block tracking-wide text-black text-lg font-bold mb-2`;
 
     const { user, refresh, setRefresh, token } = useAuthContext();
 
@@ -33,9 +33,9 @@ export default function Profile() {
 
         // National information
         setNationalId(user.nationalId);
-        setProfile(`https://localhost:44356/Users/PI/${user.profilePic}`);
-        setFront(`https://localhost:44356/Users/NI/${user.nationalPicFront}`);
-        setBack(`https://localhost:44356/Users/NI/${user.nationalPicBack}`);
+        setProfile(`http://localhost:5231/Users/PI/${user.profilePic}`);
+        setFront(`http://localhost:5231/Users/NI/${user.nationalPicFront}`);
+        setBack(`http://localhost:5231/Users/NI/${user.nationalPicBack}`);
     }, [personalState, nationalState, user]);
 
     const [errors, setErrors] = useState({});
@@ -136,17 +136,17 @@ export default function Profile() {
     };
 
     return (
-        <div className="sm:flex mt-[75px] sm:mx-10 justify-evenly gap-5">
-            <div className="bg-white rounded shadow-md sm:px-16 h-fit py-10 sm:sticky sm:top-20 flex flex-col items-center justify-center sm:order-2 select-none">
+        <div className="sm:flex mt-20 sm:mt-32 sm:mx-10 justify-evenly gap-5">
+            <div className="bg-white rounded shadow-md sm:px-16 h-fit pt-10 sm:pb-10 sm:sticky sm:top-32 flex flex-col items-center justify-center sm:order-2 select-none">
                 <img
-                    className="object-cover w-52 h-52 p-1 rounded-full ring-2 ring-prime-lh select-none"
+                    className="object-cover w-auto h-52 rounded-lg mt-5 sm:mt-0 ring-4 p-1 ring-prime-lh select-none"
                     src={user.profilePic ? profile : "img/defaultProfile.webp"}
                     alt="Bordered avatar"
                 />
-                <div className="flex sm:flex-col gap-2 mt-5">
+                <div className="flex sm:flex-col gap-2 mt-5 mx-3 sm:mx-0">
                     <button
                         type="button"
-                        className="py-3.5 px-2 sm:w-48 text-base font-medium text-indigo-100 focus:outline-none
+                        className="py-3.5 px-2 sm:w-52 text-base font-medium text-indigo-100 focus:outline-none
                          bg-prime rounded-lg border border-indigo-200 hover:bg-indigo-900 
                          focus:z-10 focus:ring-4 focus:ring-indigo-200"
                         onClick={() => setActiveForm('personalInfo')}
@@ -155,7 +155,7 @@ export default function Profile() {
                     </button>
                     <button
                         type="button"
-                        className="py-3.5 px-2 sm:w-48 text-base font-medium text-indigo-100 focus:outline-none
+                        className="py-3.5 px-2 sm:w-52 text-base font-medium text-indigo-100 focus:outline-none
                          bg-prime rounded-lg border border-indigo-200 hover:bg-indigo-900 
                          focus:z-10 focus:ring-4 focus:ring-indigo-200"
                         onClick={() => setActiveForm('nationalInfo')}
@@ -164,7 +164,7 @@ export default function Profile() {
                     </button>
                     <button
                         type="button"
-                        className="py-3.5 px-2 sm:w-48 text-base font-medium text-indigo-100 focus:outline-none
+                        className="py-3.5 px-2 sm:w-52  text-base font-medium text-indigo-100 focus:outline-none
                          bg-prime rounded-lg border border-indigo-200 hover:bg-indigo-900 
                          focus:z-10 focus:ring-4 focus:ring-indigo-200"
                         onClick={() => setActiveForm('changePassword')}
@@ -173,10 +173,10 @@ export default function Profile() {
                     </button>
                 </div>
             </div>
-            <div className="bg-white rounded shadow-md px-10 sm:py-5 pt-2 pb-20 w-full items-center text-prime sm:order-1">
+            <div className="bg-white rounded shadow-md px-10 sm:py-5 pt-2 sm:mb-3.5 pb-20 w-full items-center text-prime sm:order-1">
                 {activeForm === 'personalInfo' && (
                     <form onSubmit={handleSubmitPersonalInfo}>
-                        <h2 className='font-bold my-5 sm:my-10'>المعلومات الشخصيه للمستخدم</h2>
+                        <h2 className='font-bold my-5 sm:my-10 text-xl'>المعلومات الشخصيه للمستخدم</h2>
                         <div className="mb-4 sm:mb-6">
                             <label htmlFor="fullName" className={labelStyle}>
                                 الاسم كامل
@@ -251,7 +251,7 @@ export default function Profile() {
                 )}
                 {activeForm === 'nationalInfo' && (
                     <form onSubmit={handleSubmitNationalInfo}>
-                        <h2 className='font-bold my-5 sm:my-10'>المعلومات القومية</h2>
+                        <h2 className='font-bold my-5 sm:my-10 text-xl'>المعلومات القومية</h2>
                         <div className="mb-4 sm:mb-6">
                             <label htmlFor="nationalID" className={labelStyle}>
                                 الرقم القومى
@@ -373,19 +373,20 @@ export default function Profile() {
                             </div>
                         </div>
                         )}
-                        {passwordChangeError && (<div
-                            className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md"
-                            role="alert"
-                        >
-                            <div className="flex items-center">
-                                <div className="py-1 pe-4">
-                                    <i className='pi pi-thumbs-down-fill text-2xl'></i>
+                        {passwordChangeError && (
+                            <div
+                                className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md"
+                                role="alert"
+                            >
+                                <div className="flex items-center">
+                                    <div className="py-1 pe-4">
+                                        <i className='pi pi-thumbs-down-fill text-2xl'></i>
+                                    </div>
+                                    <p className="font-bold tracking-wider text-lg">حدث خطأ اثناء تغير كلمة المرور تأكد من كلمة المرور السابقه</p>
                                 </div>
-                                <p className="font-bold tracking-wider text-lg">حدث خطأ اثناء تغير كلمة المرور تأكد من كلمة المرور السابقه</p>
                             </div>
-                        </div>
                         )}
-                        <h2 className='font-bold my-5 sm:my-10'>تغير كلمة المرور</h2>
+                        <h2 className='font-bold my-5 sm:my-10 text-xl'>تغير كلمة المرور</h2>
                         <div className="mb-4 sm:mb-6">
                             <label htmlFor="oldpassword" className={labelStyle}>
                                 كلمة المرور السابقه

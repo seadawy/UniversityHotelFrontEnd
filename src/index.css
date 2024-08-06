@@ -62,11 +62,20 @@ span[data-p-disabled="true"] {
     background-color: rgb(171, 171, 171);
 }
 
+/* gellaria */
+.p-galleria-item-next,
+.p-galleria-item-prev {
+    background-color: #004c6f41;
+}
+
+.p-galleria-item-next:hover,
+.p-galleria-item-prev:hover {
+    background-color: #004c6f8c;
+}
 
 /* table */
 .p-datatable-wrapper {
     border-radius: 8px;
-    box-shadow: 0 0 5px 0px #004b6f;
 }
 
 .p-datatable {
@@ -76,4 +85,8 @@ span[data-p-disabled="true"] {
 .p-column-title {
     text-align: center;
     width: -webkit-fill-available;
+}
+
+.p-datatable-emptymessage td {
+    text-align: center;
 }

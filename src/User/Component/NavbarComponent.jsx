@@ -7,7 +7,8 @@ const NavbarComponent = () => {
         <>
             <nav className="p-5 py-3 shadow-md fixed w-full z-20 top-0 bg-slate-50 flex flex-row items-center justify-between">
                 <div className="flex items-center">
-                    <h2 className="me-5 text-xl font-bold" style={{ textShadow: "#ccc 1px 1px 1px" }}>نظام الحجوزات اللالكترونى لفندق الجامعة</h2>
+                    <img src="logo.png" width="85" alt="logo" />
+                    <h2 className="me-5 text-3xl font-bold ms-5 ">فندق الجامعة</h2>
                 </div>
                 {!user && (
                     <div className="flex gap-2">

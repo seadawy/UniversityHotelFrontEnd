@@ -12,7 +12,7 @@ const UserLayout = () => {
 
             <div className="flex flex-1 w-full">
                 {user && (<SidebarComponent />)}
-                <main className={`flex-1 ${user ? '' : 'mt-16'}`}>
+                <main className={`flex-1 ${user ? '' : 'mt-20'}`}>
                     <Outlet />
                 </main>
             </div>
