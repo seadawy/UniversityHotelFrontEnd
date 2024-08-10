@@ -106,7 +106,7 @@ export default function Login() {
 
                     <p className="mt-5 text-center text-xl text-span">
                         ليس لديك حساب ؟ {" "}
-                        <Link to="/register" className="font-semibold leading-6 text-coral hover:text-lightBlue">
+                        <Link to="/register" className="font-semibold leading-6 text-yellow-500 hover:text-indigo-300">
                             سجل الان
                         </Link>
                     </p>

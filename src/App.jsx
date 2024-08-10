@@ -16,13 +16,13 @@ import RoomDetails from './User/RoomDetails';
 /* ADMIN */
 import AdminLayout from './Admin/AdminLayout';
 import Dashboard from './Admin/Dashboard';
+import RequestManage from './Admin/RequestManage';
+import UsersManage from './Admin/UsersManage';
+import UsersView from './Admin/UsersView'
 import RoomsAdd from './Admin/RoomsAdd';
-import AddUsers from './Admin/AddUsers';
-import ReportsManage from './Admin/ReportsManage';
-import ReportDetails from './Admin/ReportDetails';
+import RoomsEdit from './Admin/RoomsEdit';
 import RoomsManage from './Admin/RoomsManage';
-// Helper function to check if user is a super admin
-const isSuperAdmin = (user) => user && user.roles && user.roles.includes('SuperAdmin');
+import ReportsManage from './Admin/ReportsManage';
 
 function App() {
   const { user, token } = useAuthContext();
@@ -35,12 +35,12 @@ function App() {
     setLoading(true);
   }, [user]);
 
-  const isSuperAdmin = (user) => user && user.roles && user.roles.includes('SuperAdmin');
+  const isAdmin = (user) => user && (user.role == 'SuperAdmin' || user.role == 'UniversityViceDean');
   return (
     <>
       <Router>
         <Routes>
-          {!isSuperAdmin(user) ?
+          {!isAdmin(user) ?
             <Route Route path="/" element={<UserLayout />}>
               <Route index element={!user ? <Login /> : <Navigate to="/profile" />} />
               <Route path="/register" element={!user ? <Register /> : <Navigate to="/profile" />} />
@@ -54,15 +54,18 @@ function App() {
             :
             <Route path="/" element={<AdminLayout />}>
               <Route index element={<Navigate to="dashboard" />} />
-              <Route path="dashboard" element={user ? <Dashboard /> : <Navigate to="/" />} />
-              {/* Rooms */}
-              <Route path="rooms" element={<RoomsAdd />} />
-              <Route path="rooms/manage" element={<RoomsManage />} />
+              <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/" />} />
+              {/* Requestes */}
+              <Route path="/requestes" element={user ? <RequestManage /> : <Navigate to="/" />} />
               {/* Users */}
-              <Route path="users" element={<AddUsers />} />
+              <Route path='/Users' element={user ? <UsersManage /> : <Navigate to="/" />} />
+              <Route path='/Users/View/:id' element={user ? <UsersView /> : <Navigate to="/" />} />
+              {/* Rooms */}
+              <Route path="/rooms" element={<RoomsAdd />} />
+              <Route path="/RoomsManage" element={<RoomsManage />} />
+              <Route path="/RoomsManage/Edit/:id" element={<RoomsEdit />} />
               {/* Complains */}
               <Route path="/reports/manage" element={<ReportsManage />} />
-              <Route path="/reports/:id" element={<ReportDetails />} />
             </Route>
           }
         </Routes>

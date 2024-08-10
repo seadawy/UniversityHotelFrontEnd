@@ -6,29 +6,15 @@ import {
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
 } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { FunnelIcon, MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom'
-
-const sortOptions = [
-    { name: 'Most Popular', href: '#', current: true },
-    { name: 'Best Rating', href: '#', current: false },
-    { name: 'Newest', href: '#', current: false },
-    { name: 'Price: Low to High', href: '#', current: false },
-    { name: 'Price: High to Low', href: '#', current: false },
-]
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
+import { useAuthContext } from '../Auth/useAuthContext'
 
 export default function Rooms() {
     const [rooms, setRooms] = useState();
+    const { user } = useAuthContext();
     useEffect(() => {
         fetch('/api/Rooms')
             .then(res => res.json())
@@ -223,7 +209,7 @@ export default function Rooms() {
                                                         {room.roomNumber}
                                                     </h1>
                                                     <h1>
-                                                        {room.price} جنيه لليوم
+                                                        {user.isEmployee ? room.stuffPrice : room.guestPrice} جنيه لليوم
                                                     </h1>
                                                 </div>
                                                 <div className='flex flex-col'>

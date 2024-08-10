@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 export default function Requests() {
     const { token } = useAuthContext();
     const [requests, setRequests] = useState([]);
-    const [statusFilter, setStatusFilter] = useState(null);
+    const [statusFilter, setStatusFilter] = useState([]);
 
     useEffect(() => {
         fetch('/api/BookRequests/GetUserBooks', {
@@ -29,13 +29,13 @@ export default function Requests() {
         } else if (rowData.checkin) {
             return <Tag severity="info" value="تم التسجيل" />;
         } else if (rowData.isApproved) {
-            return <Tag severity="success" value="اكتمل" />;
+            return <Tag severity="success" value="مقبول" />;
         } else {
-            return <Tag severity="warning" value="انتظار الموافقة" />;
+            return <Tag severity="warning" value="انتظار" />;
         }
     };
 
-    const filteredRequests = statusFilter
+    const filteredRequests = statusFilter && requests.length
         ? requests.filter(request => {
             if (statusFilter === 'تم المغادرة') return request.checkout;
             if (statusFilter === 'تم التسجيل') return request.checkin;
@@ -43,14 +43,7 @@ export default function Requests() {
             if (statusFilter === 'انتظار الموافقة') return !request.isApproved && !request.checkout && !request.checkin;
             return true;
         })
-        : requests;
-
-    const statusOptions = [
-        { label: 'تم المغادرة', value: 'تم المغادرة' },
-        { label: 'تم التسجيل', value: 'تم التسجيل' },
-        { label: 'اكتمل', value: 'اكتمل' },
-        { label: 'انتظار الموافقة', value: 'انتظار الموافقة' }
-    ];
+        : (requests.length ? requests : []);
 
     const FirstCol = (rowData) => (
         <Link className='underline underline-offset-2 hover:text-prime' to={`/rooms/${rowData.roomId}`} >
@@ -60,17 +53,20 @@ export default function Requests() {
 
     return (
         <>
-            <h1 className='mt-32 mb-5 font-bold mx-10 text-4xl'>سجل الطلبات</h1>
-            <div className='flex flex-col items-center justify-center'>
+            <div className='flex flex-col items-center justify-center bg-white sm:mx-8 mt-32 rounded-md pt-5 shadow-lg'>
+                <h1 className='font-bold sm:mx-10 text-4xl sm:text-start sm:w-full sm:ps-10 font-Beiruti'>سِجل الطلبات</h1>
                 <div className='w-full flex justify-end px-10 sm:pe-7'>
-                    <Dropdown
+                    <select
                         value={statusFilter}
-                        options={statusOptions}
-                        onChange={(e) => setStatusFilter(e.value)}
+                        onChange={(e) => setStatusFilter(e.target.value)}
                         placeholder="حدد الحالة"
-                        className="w-full md:w-1/4 p-inputtext-sm border border-gray-300 rounded-md shadow-sm"
-                        aria-label="Filter by status"
-                    />
+                        className="w-full md:w-1/4 p-inputtext-sm border border-gray-300 rounded-md py-2.5 shadow-sm"
+                    >
+                        <option value="انتظار">انتظار</option>
+                        <option value="مقبول">مقبول</option>
+                        <option value="مرفوض">مرفوض</option>
+                        <option value="غادر">غادر</option>
+                    </select>
                 </div>
                 <div className='w-full'>
                     <DataTable

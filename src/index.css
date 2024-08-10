@@ -3,9 +3,6 @@
 
 @layer tailwind-base, primereact, tailwind-utilities;
 
-/* IMPORTANT: In "styled" mode you must add the PrimeReact Theme here. Do NOT include in "unstyled" mode */
-@import 'primereact/resources/themes/lara-light-blue/theme.css' layer(primereact);
-
 @layer tailwind-base {
     @tailwind base;
 }
@@ -89,4 +86,59 @@ span[data-p-disabled="true"] {
 
 .p-datatable-emptymessage td {
     text-align: center;
+}
+
+.rdt_TableCell {
+    font-size: larger;
+}
+
+.rdt_TableCol {
+    font-size: large;
+    background-color: #004b6f;
+    color: white;
+}
+
+.p-datepicker-header,
+.p-datepicker-month,
+.p-datepicker-year {
+    background-color: #004b6f;
+    color: white;
+    border-radius: 5px;
+}
+
+.p-paginator-element.p-link.p-highlight {
+    background-color: #004b6f;
+    color: white;
+}
+
+.p-datepicker-prev,
+.p-datepicker-next {
+    rotate: 180deg;
+    color: white;
+}
+
+.p-paginator-last,
+.p-paginator-next,
+.p-paginator-prev,
+.p-paginator-first {
+    rotate: 180deg;
+}
+
+.p-datepicker-prev:hover,
+.p-datepicker-next:hover {
+    color: #004b6f;
+}
+
+.gMeyEf {
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.p-image{
+    border-radius: 10px;
+    overflow: hidden;
+}	
+
+.p-icon.p-accordion-toggle-icon{
+    position: absolute;
+    left: 25px;
 }

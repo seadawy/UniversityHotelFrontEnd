@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuthContext } from './useAuthContext';
 
 const Register = () => {
@@ -7,12 +7,18 @@ const Register = () => {
     const inputStyle = `block w-full rounded-md border-0 px-3 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`;
     const labelStyle = `block tracking-wide text-grey-darker text-base font-bold mb-2`;
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate();
+    const [allRegions, setAllRegions] = useState([]);
+    useEffect(() => {
+        fetch('/api/HotelRegions').then(res => res.json()).then(data => {
+            setAllRegions(data);
+        }).catch(err => console.error(err));
+    }, [])
 
-    // Required
+    // 
     const [FullName, setFullName] = useState('');
     const [NationalId, setNationalId] = useState('');
     const [Email, setEmail] = useState('');
+    const [isEmployee, setIsEmployee] = useState(false);
     const [Password, setPassword] = useState('');
     const [confPassword, setConfPassword] = useState('');
     const confPasswordHadel = (e) => {
@@ -32,13 +38,12 @@ const Register = () => {
     const [PhoneNumber, setPhoneNumber] = useState('');
 
     // Adress
-    const [city, setCity] = useState('');
     const [area, setArea] = useState('');
     const [street, setStreet] = useState('');
     const [Address, setAdress] = useState('');
     useEffect(() => {
-        setAdress(`${city} - ${area} - ${street}`);
-    }, [city, area, street]);
+        setAdress(`${area} - ${street}`);
+    }, [area, street]);
 
     // Files
     const [profile, setProfile] = useState(null);
@@ -58,12 +63,13 @@ const Register = () => {
         SForm.append('Password', Password);
         SForm.append('Gender', selectedGender);
         SForm.append('NationalId', NationalId);
-        SForm.append('RegionId', 2);
+        SForm.append('IsEmployee',isEmployee);
+        SForm.append('RegionId', region);
         SForm.append('ProfilePic', profile);
         SForm.append('NationalIdPicFront', front);
         SForm.append('NationalIdPicBack', back);
         SForm.append('Address', Address);
-        SForm.append('PhoneNumber', NationalId);
+        SForm.append('PhoneNumber', PhoneNumber);
 
         fetch('/api/HotelAuth/register', {
             method: "POST",
@@ -109,8 +115,8 @@ const Register = () => {
                             <label className={labelStyle} htmlFor="fullName">
                                 الاسم بالكامل
                             </label>
-                            <input required className={inputStyle} id="fullName" type="text" value={FullName} onChange={(e) => setFullName(e.target.value)} />
-                            {errors.FullName && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من ملء الحقل</p>}
+                            <input className={inputStyle} id="fullName" type="text" value={FullName} onChange={(e) => setFullName(e.target.value)} />
+                            {errors.FullName && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.FullName}</p>}
                         </div>
                     </div>
                     {/* National ID */}
@@ -119,8 +125,8 @@ const Register = () => {
                             <label className={labelStyle} htmlFor="NationalId">
                                 الرقم القومى
                             </label>
-                            <input required className={inputStyle} id="NationalId" type="text" value={NationalId} onChange={(e) => setNationalId(e.target.value)} />
-                            {errors.NationalId && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من ملء الحقل بشكل صحيح 14 رقم</p>}
+                            <input className={inputStyle} id="NationalId" type="text" value={NationalId} onChange={(e) => setNationalId(e.target.value)} />
+                            {errors.NationalId && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.NationalId}</p>}
                         </div>
                     </div>
                     {/* Email */}
@@ -129,15 +135,14 @@ const Register = () => {
                             <label className={labelStyle} htmlFor="Email">
                                 البريد الالكترونى
                             </label>
-                            <input required className={inputStyle} id="Email" type="email" value={Email} onChange={(e) => setEmail(e.target.value)} />
-                            {errors.Email && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من ملء الحقل</p>}
+                            <input className={inputStyle} id="Email" type="email" value={Email} onChange={(e) => setEmail(e.target.value)} />
+                            {errors.Email && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.Email}</p>}
                         </div>
                     </div>
                     {/* Gender */}
-                    <div className="-mx-3 flex items-center gap-10 mb-3">
+                    <div className="-mx-3 flex items-center gap-10 ">
                         <div className="flex items-center ms-3">
                             <input
-                                required
                                 id="default-radio-1"
                                 type="radio"
                                 name="gender"
@@ -170,16 +175,20 @@ const Register = () => {
                                 انثى
                             </label>
                         </div>
-                        {errors.Email && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من اختيار النوع</p>}
                     </div>
+                    {errors.Gender && <p className="text-red-500 text-sm m-1 mb-3 tracking-wider">{errors.Gender}</p>}
                     {/* Address */}
                     <div className="-mx-3 md:flex mb-3">
                         <div className="md:w-1/2 mb-1 px-3 ">
                             <label className={labelStyle} htmlFor="grid-city">
                                 المحافظة
                             </label>
-                            <input className={inputStyle} id="grid-city" type="text"
-                                value={city} onChange={(e) => setCity(e.target.value)} />
+                            <select className={inputStyle} id="grid-city" type="text"
+                                value={region} onChange={(e) => setRegion(e.target.value)} >
+                                <option>اختار محافظتك</option>
+                                {allRegions.map(reg => (<option key={reg.id} value={reg.id}>{reg.name}</option>))}
+                            </select>
+                            {errors.Gender && <p className="text-red-500 text-sm m-1 mb-3 tracking-wider">المحافظة مطلوبه</p>}
                         </div>
                         <div className="md:w-1/2 mb-1 px-3">
                             <label className={labelStyle} htmlFor="grid-area">
@@ -228,7 +237,7 @@ const Register = () => {
                                 type="file"
                                 onChange={handleFrontFileChange}
                             />
-                            {errors.NationalIdPicFront && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من اضافة صوره البطاقة</p>}
+                            {errors.NationalIdPicFront && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.NationalIdPicFront}</p>}
                         </div>
                         {/* Back Card */}
                         <div className="md:w-1/2 px-3 mt-1">
@@ -250,7 +259,7 @@ const Register = () => {
                                 type="file"
                                 onChange={handleBackFileChange}
                             />
-                            {errors.NationalIdPicBack && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من اضافة صوره لظهر البطاقة</p>}
+                            {errors.NationalIdPicBack && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.NationalIdPicBack}</p>}
                         </div>
                     </div>
                     {/* ProfilePic */}
@@ -276,14 +285,23 @@ const Register = () => {
                             />
                         </div>
                     </div>
+                    {/* Employee */}
+                    <div className="-mx-2 md:flex my-3">
+                        <div className="md:w-full px-3 flex gap-2 items-center flex-row">
+                            <input type="checkbox" name="employee" id="employee" value={isEmployee} onChange={() => setIsEmployee(!isEmployee)} className='w-8 h-8' />
+                            <label htmlFor="employee" className='text-xl'>
+                                موظف بالجامعه
+                            </label>
+                        </div>
+                    </div>
                     {/* Password */}
                     <div className="-mx-3 md:flex mb-3">
                         <div className="md:w-full px-3">
                             <label className={labelStyle} htmlFor="grid-password">
                                 كلمة المرور
                             </label>
-                            <input required className={inputStyle} id="grid-password" type="password" placeholder="*******" value={Password} onChange={(e) => setPassword(e.target.value)} />
-                            {errors.Password && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من ملء الحقل</p>}
+                            <input className={inputStyle} id="grid-password" type="password" placeholder="*******" value={Password} onChange={(e) => setPassword(e.target.value)} />
+                            {errors.Password && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من ملء الحقل على الاقل 8 حروف او ارقام</p>}
                         </div>
                     </div>
                     {/* Confirm Password */}
@@ -292,7 +310,7 @@ const Register = () => {
                             <label className={labelStyle} htmlFor="grid-cof-password">
                                 نأكيد كلمة المرور
                             </label>
-                            <input required className={inputStyle} id="grid-cof-password" type="password" placeholder="*******" value={confPassword} onChange={(e) => confPasswordHadel(e)} />
+                            <input className={inputStyle} id="grid-cof-password" type="password" placeholder="*******" value={confPassword} onChange={(e) => confPasswordHadel(e)} />
                             {errors.ConfPass && <p className="text-red-500 text-sm m-1 tracking-wider"> {errors.ConfPass} </p>}
                         </div>
                     </div>
@@ -312,11 +330,11 @@ const Register = () => {
                 {/* Sticky Images Component */}
                 <div className="bg-white p-8 py-16 pb-14 rounded-lg hidden lg:block md:hidden sm:hidden shadow-md max-w-lg sticky top-20 h-fit">
                     <center>
-                        <img src="img/welcome.jpg" width="700" alt="welcome" />
+                        <img src="img/welcome.jpg" width="600" alt="welcome" />
                         <img src="logo.png" width="325" alt="logo" />
-                        <p className="text-center text-xl text-span">
+                        <p className="text-center text-xl text-span mt-4">
                             لديك حساب بالفعل؟ {" "}
-                            <Link to="/login" className="font-semibold leading-6 text-coral hover:text-lightBlue">
+                            <Link to="/" className="font-semibold leading-6 text-yellow-600 hover:text-indigo-300">
                                 تسجيل الدخول
                             </Link>
                         </p>

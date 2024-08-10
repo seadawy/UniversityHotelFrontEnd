@@ -9,7 +9,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useAuthContext } from '../Auth/useAuthContext';
 
 export default function RoomDetails() {
-    const { token } = useAuthContext();
+    const { token,user } = useAuthContext();
     const [room, setRoom] = useState(null);
     const [price, setPrice] = useState(0);
     const today = new Date();
@@ -20,7 +20,7 @@ export default function RoomDetails() {
     useEffect(() => {
         fetch(`/api/Rooms/${id}`).then(res => res.json()).then(data => {
             setRoom(data)
-            setPrice(data.price);
+            setPrice(user.isEmployee ?  data.stuffPrice : data.guestPrice);
             const dateObjects = data.roomTimes.map(dateString => new Date(dateString));
             setInvalidDates(dateObjects)
         }).catch(err => console.error(err));
