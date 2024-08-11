@@ -4,7 +4,6 @@ import { Tag } from "primereact/tag";
 import { Link } from "react-router-dom";
 import DialogComponent from "./Component/DialogComponent";
 import { useAuthContext } from "../Auth/useAuthContext";
-import { WiDayCloudy } from "react-icons/wi";
 
 const RoomsManage = () => {
     const { token } = useAuthContext();

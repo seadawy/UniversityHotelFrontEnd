@@ -35,7 +35,7 @@ function App() {
     setLoading(true);
   }, [user]);
 
-  const isAdmin = (user) => user && (user.role == 'SuperAdmin' || user.role == 'UniversityViceDean');
+  const isAdmin = (user) => user && (user.role == 'SuperAdmin' || user.role == 'UniversityViceDean' || user.role == 'Receptionist');
   return (
     <>
       <Router>
@@ -70,7 +70,7 @@ function App() {
           }
         </Routes>
       </Router >
-      {/* <Sugar customLoading={loading} background="#fff" color="#007b8a" /> */}
+      <Sugar customLoading={loading} background="#fff" color="#007b8a" />
     </>
   );
 }

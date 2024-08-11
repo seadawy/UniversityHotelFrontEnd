@@ -13,18 +13,48 @@ import { Link } from 'react-router-dom'
 import { useAuthContext } from '../Auth/useAuthContext'
 
 export default function Rooms() {
-    const [rooms, setRooms] = useState();
+    const [rooms, setRooms] = useState([]);
+    const [filteredRooms, setFilteredRooms] = useState([]);
+    const [nowTime, setNowTime] = useState(false);
+    const [numberOfPeople, setNumberOfPeople] = useState([]);
+    const [airConditioned, setAirConditioned] = useState(false);
+    const [mobileFiltersOpen,setMobileFiltersOpen] = useState(false);
     const { user } = useAuthContext();
+
     useEffect(() => {
         fetch('/api/Rooms')
             .then(res => res.json())
             .then((data) => {
                 setRooms(data);
+                setFilteredRooms(data);
             })
             .catch(err => console.log(err));
     }, []);
 
-    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    useEffect(() => {
+        // Apply filters
+        let filtered = rooms;
+
+        if (nowTime) {
+            filtered = filtered.filter(room => room.isCheckedIn);
+        }
+
+        if (numberOfPeople.length > 0) {
+            filtered = filtered.filter(room => numberOfPeople.includes(room.numberOfBeds));
+        }
+
+        if (airConditioned) {
+            filtered = filtered.filter(room => room.airConditioned);
+        }
+
+        setFilteredRooms(filtered);
+    }, [nowTime, numberOfPeople, airConditioned, rooms]);
+
+    const handleNumberOfPeopleChange = (num) => {
+        setNumberOfPeople((prev) =>
+            prev.includes(num) ? prev.filter(n => n !== num) : [...prev, num]
+        );
+    };
 
     return (
         <div className="bg-white mt-10">
@@ -38,7 +68,7 @@ export default function Rooms() {
                     <div className="fixed inset-0 z-40 flex">
                         <DialogPanel
                             transition
-                            className="relative ml-auto flex h-full w-full max-w-xs transform flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl transition duration-300 ease-in-out data-[closed]:translate-x-full"
+                            className="relative ml-auto ps-5 flex h-full w-full max-w-xs transform flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl transition duration-300 ease-in-out data-[closed]:translate-x-full"
                         >
                             <div className="flex items-center justify-between px-4">
                                 <h2 className="text-lg font-medium text-gray-900">التفضيلات</h2>
@@ -52,38 +82,123 @@ export default function Rooms() {
                             </div>
                             {/* Filters */}
                             <form className="mt-4 border-t border-gray-200">
-                                <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
-                                    <h3 className="-mx-2 -my-3 flow-root">
-                                        <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-                                            <span className="ml-6 flex items-center">
-                                                <PlusIcon aria-hidden="true" className="h-5 w-5 group-data-[open]:hidden" />
-                                                <MinusIcon aria-hidden="true" className="h-5 w-5 [.group:not([data-open])_&]:hidden" />
-                                            </span>
-                                        </DisclosureButton>
-                                    </h3>
-                                    <DisclosurePanel className="pt-6">
-                                        <div className="space-y-6">
-                                            <div className="flex items-center">
-                                                <input
-                                                    id={`filter-mobile`}
-                                                    name="numberOfBeds"
-                                                    type="text"
-                                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                />
-                                                <label
-                                                    htmlFor={`filter-mobile`}
-                                                    className="ml-3 min-w-0 flex-1 text-gray-500"
-                                                >
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </DisclosurePanel>
+                               {/* Rooms Time Filter */}
+                               <Disclosure as="div" className="border-b border-gray-200 py-6">
+                                    {({ open }) => (
+                                        <>
+                                            <h3 className="-my-3 flow-root">
+                                                <DisclosureButton className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                    <span className="font-medium text-lg text-gray-900">الغرف</span>
+                                                    <span className="ml-6 flex items-center">
+                                                        {open ? (
+                                                            <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                                                        ) : (
+                                                            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                                        )}
+                                                    </span>
+                                                </DisclosureButton>
+                                            </h3>
+                                            <DisclosurePanel className="pt-6">
+                                                <div className="space-y-4">
+                                                    <div className="flex flex-col gap-2">
+                                                        <label htmlFor="nowTime" className='flex'>
+                                                            <input
+                                                                type="checkbox"
+                                                                className='w-10'
+                                                                name="nowTime"
+                                                                id="nowTime"
+                                                                checked={nowTime}
+                                                                onChange={() => setNowTime(!nowTime)}
+                                                            /> متاح حالا
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </DisclosurePanel>
+                                        </>
+                                    )}
+                                </Disclosure>
+                                {/* Number of Ppl Filter */}
+                                <Disclosure as="div" className="border-b border-gray-200 py-6">
+                                    {({ open }) => (
+                                        <>
+                                            <h3 className="-my-3 flow-root">
+                                                <DisclosureButton className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                    <span className="font-medium text-lg text-gray-900">عدد الافراد</span>
+                                                    <span className="ml-6 flex items-center">
+                                                        {open ? (
+                                                            <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                                                        ) : (
+                                                            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                                        )}
+                                                    </span>
+                                                </DisclosureButton>
+                                            </h3>
+                                            <DisclosurePanel className="pt-6">
+                                                <div className="space-y-4">
+                                                    <div className="flex flex-col gap-2">
+                                                        <label htmlFor="person1" className='flex'>
+                                                            <input
+                                                                type="checkbox"
+                                                                className='w-10'
+                                                                name="person1"
+                                                                id="person1"
+                                                                onChange={() => handleNumberOfPeopleChange(1)}
+                                                            /> فرد واحد
+                                                        </label>
+                                                        <label htmlFor="person2" className='flex'>
+                                                            <input
+                                                                type="checkbox"
+                                                                className='w-10'
+                                                                name="person2"
+                                                                id="person2"
+                                                                onChange={() => handleNumberOfPeopleChange(2)}
+                                                            /> فردان
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </DisclosurePanel>
+                                        </>
+                                    )}
+                                </Disclosure>
+                                {/* AC Filter */}
+                                <Disclosure as="div" className="border-b border-gray-200 py-6">
+                                    {({ open }) => (
+                                        <>
+                                            <h3 className="-my-3 flow-root">
+                                                <DisclosureButton className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                    <span className="font-medium text-lg text-gray-900">التكيف</span>
+                                                    <span className="ml-6 flex items-center">
+                                                        {open ? (
+                                                            <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                                                        ) : (
+                                                            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                                        )}
+                                                    </span>
+                                                </DisclosureButton>
+                                            </h3>
+                                            <DisclosurePanel className="pt-6">
+                                                <div className="space-y-4">
+                                                    <div className="flex flex-col gap-2">
+                                                        <label htmlFor="airConditioned" className='flex'>
+                                                            <input
+                                                                type="checkbox"
+                                                                className='w-10'
+                                                                name="airConditioned"
+                                                                id="airConditioned"
+                                                                checked={airConditioned}
+                                                                onChange={() => setAirConditioned(!airConditioned)}
+                                                            /> يلزم وجودة
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </DisclosurePanel>
+                                        </>
+                                    )}
                                 </Disclosure>
                             </form>
                         </DialogPanel>
                     </div>
                 </Dialog>
-
                 <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900">الغرف المتاحه</h1>
@@ -126,7 +241,14 @@ export default function Rooms() {
                                                 <div className="space-y-4">
                                                     <div className="flex flex-col gap-2">
                                                         <label htmlFor="nowTime" className='flex'>
-                                                            <input type="checkbox" className='w-10' name="nowTime" id="nowTime" /> متاح حالا
+                                                            <input
+                                                                type="checkbox"
+                                                                className='w-10'
+                                                                name="nowTime"
+                                                                id="nowTime"
+                                                                checked={nowTime}
+                                                                onChange={() => setNowTime(!nowTime)}
+                                                            /> متاح حالا
                                                         </label>
                                                     </div>
                                                 </div>
@@ -154,10 +276,22 @@ export default function Rooms() {
                                                 <div className="space-y-4">
                                                     <div className="flex flex-col gap-2">
                                                         <label htmlFor="person1" className='flex'>
-                                                            <input type="checkbox" className='w-10' name="person1" id="person1" /> فرد واحد
+                                                            <input
+                                                                type="checkbox"
+                                                                className='w-10'
+                                                                name="person1"
+                                                                id="person1"
+                                                                onChange={() => handleNumberOfPeopleChange(1)}
+                                                            /> فرد واحد
                                                         </label>
                                                         <label htmlFor="person2" className='flex'>
-                                                            <input type="checkbox" className='w-10' name="person2" id="person2" /> فردان
+                                                            <input
+                                                                type="checkbox"
+                                                                className='w-10'
+                                                                name="person2"
+                                                                id="person2"
+                                                                onChange={() => handleNumberOfPeopleChange(2)}
+                                                            /> فردان
                                                         </label>
                                                     </div>
                                                 </div>
@@ -184,9 +318,15 @@ export default function Rooms() {
                                             <DisclosurePanel className="pt-6">
                                                 <div className="space-y-4">
                                                     <div className="flex flex-col gap-2">
-
-                                                        <label htmlFor="person2" className='flex'>
-                                                            <input type="checkbox" className='w-10' name="person2" id="person2" /> يلزم وجودة
+                                                        <label htmlFor="airConditioned" className='flex'>
+                                                            <input
+                                                                type="checkbox"
+                                                                className='w-10'
+                                                                name="airConditioned"
+                                                                id="airConditioned"
+                                                                checked={airConditioned}
+                                                                onChange={() => setAirConditioned(!airConditioned)}
+                                                            /> يلزم وجودة
                                                         </label>
                                                     </div>
                                                 </div>
@@ -198,7 +338,7 @@ export default function Rooms() {
                             {/* Room grid */}
                             <div className="lg:col-span-3 col-span-full">
                                 <div className="border-gray-200 border-b pb-10 grid gap-y-10 xl:gap-x-4">
-                                    {rooms && rooms.map((room) => (
+                                    {rooms && filteredRooms.map((room) => (
                                         <Link key={room.id} to={`/rooms/${room.id}`} className="group relative flex flex-col rounded-md bg-indigo-50 hover:bg-gray-200 pb-5">
                                             <div className="overflow-hidden rounded-md max-h-80 bg-gray-200 group-hover:opacity-75">
                                                 <img src={`http://localhost:5231/Rooms/Images/${room.images[0].image}`} alt={room.Title} className="h-full w-full object-cover object-center" />

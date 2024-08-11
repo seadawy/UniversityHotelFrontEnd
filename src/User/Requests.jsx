@@ -24,12 +24,14 @@ export default function Requests() {
     }, [token]);
 
     const statusTemplate = (rowData) => {
-        if (rowData.checkout) {
-            return <Tag severity="info" value="تم المغادرة" />;
+        if (rowData.isRejected) {
+            return <Tag severity="danger" value="مرفوض" />;
         } else if (rowData.checkin) {
-            return <Tag severity="info" value="تم التسجيل" />;
+            return <Tag severity="info" value="تم الاستلام" />;
         } else if (rowData.isApproved) {
             return <Tag severity="success" value="مقبول" />;
+        } else if (rowData.checkout) {
+            return <Tag severity="info" value="تم المغادرة" />;
         } else {
             return <Tag severity="warning" value="انتظار" />;
         }
@@ -54,7 +56,7 @@ export default function Requests() {
     return (
         <>
             <div className='flex flex-col items-center justify-center bg-white sm:mx-8 mt-32 rounded-md pt-5 shadow-lg'>
-                <h1 className='font-bold sm:mx-10 text-4xl sm:text-start sm:w-full sm:ps-10 font-Beiruti'>سِجل الطلبات</h1>
+                <h1 className='font-bold sm:mx-10 text-4xl sm:text-start sm:w-full sm:ps-10 mb-6 font-Beiruti'>سِجل الطلبات</h1>
                 <div className='w-full flex justify-end px-10 sm:pe-7'>
                     <select
                         value={statusFilter}
@@ -72,7 +74,7 @@ export default function Requests() {
                     <DataTable
                         dataKey="id"
                         value={filteredRequests}
-                        paginator rows={6}
+                        paginator rows={10}
                         showGridlines
                         emptyMessage="لم يتم تسجيل أي طلبات حتى الآن"
                         className='min-w-full '

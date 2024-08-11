@@ -9,7 +9,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useAuthContext } from '../Auth/useAuthContext';
 
 export default function RoomDetails() {
-    const { token,user } = useAuthContext();
+    const { token, user } = useAuthContext();
     const [room, setRoom] = useState(null);
     const [price, setPrice] = useState(0);
     const today = new Date();
@@ -20,7 +20,7 @@ export default function RoomDetails() {
     useEffect(() => {
         fetch(`/api/Rooms/${id}`).then(res => res.json()).then(data => {
             setRoom(data)
-            setPrice(user.isEmployee ?  data.stuffPrice : data.guestPrice);
+            setPrice(user.isEmployee ? data.stuffPrice : data.guestPrice);
             const dateObjects = data.roomTimes.map(dateString => new Date(dateString));
             setInvalidDates(dateObjects)
         }).catch(err => console.error(err));
@@ -151,12 +151,20 @@ export default function RoomDetails() {
                                 {room.numberOfBeds}
                             </h2>
                             <h2 className="bg-gray-200 rounded-md font-bold py-5 px-5 shadow h-fit w-full flex items-center">
+                                <FaLocationDot className="text-3xl me-2" />
+                                المنطقه
+                                &ensp;
+                                <i className="pi pi-angle-left text-xl"></i>
+                                &ensp;
+                                {room.regionName}
+                            </h2>
+                            <h2 className="bg-gray-200 rounded-md font-bold py-5 px-5 shadow h-fit w-full flex items-center">
                                 <i className="text-2xl me-2 pi-money-bill pi" />
                                 السعر
                                 &ensp;
                                 <i className="pi pi-angle-left text-xl"></i>
                                 &ensp;
-                                {room.price}
+                                {price}
                                 &ensp;
                                 لليوم
                             </h2>

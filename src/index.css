@@ -133,12 +133,12 @@ span[data-p-disabled="true"] {
     border-radius: 10px 10px 0 0 !important;
 }
 
-.p-image{
+.p-image {
     border-radius: 10px;
     overflow: hidden;
-}	
+}
 
-.p-icon.p-accordion-toggle-icon{
+.p-icon.p-accordion-toggle-icon {
     position: absolute;
     left: 25px;
 }
