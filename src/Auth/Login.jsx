@@ -72,11 +72,11 @@ export default function Login() {
                                 <label htmlFor="password" className="block text-lg font-bold leading-6 text-gray-900">
                                     كلمة المرور
                                 </label>
-                                <div className="text-sm">
+                             {/*    <div className="text-sm">
                                     <a href="#" className="font-semibold text-base text-gray-500 text-charcoal hover:text-prime-lh">
                                         نسية كلمة المرور ؟
                                     </a>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="mt-2">
                                 <input

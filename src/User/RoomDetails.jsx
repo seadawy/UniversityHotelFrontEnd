@@ -171,8 +171,8 @@ export default function RoomDetails() {
                         </div>
                     </div>
                     <div className="flex flex-col-reverse lg:flex-row justify-between my-5 gap-5">
-                        <div className="bg-blue-200 relative flex flex-col items-center rounded-md shadow p-5 w-full sm:w-2/6">
-                            <h2 className="text-center text-2xl font-bold mb-5">إرسال طلب حجز</h2>
+                        <div className="bg-blue-200 relative flex flex-col items-center rounded-md shadow p-5 w-full gap-5 sm:w-2/6">
+                            <h2 className="text-center text-3xl font-bold mt-2 mb-5">إرسال طلب حجز</h2>
                             {success && (
                                 <div className="absolute bg-green-400 top-0 rounded-md shadow flex flex-col justify-center items-center w-full h-full gap-5">
                                     <i className="pi pi-verified text-8xl text-white"></i>
@@ -199,29 +199,32 @@ export default function RoomDetails() {
                             )}
                             <form action="" className="" onSubmit={(e) => handelRequestForm(e)}>
                                 <div className="flex items-center mb-3">
-                                    <label htmlFor="ndays" className="text-2xl me-5">
+                                    <label htmlFor="ndays" className="text-2xl me-2">
                                         عدد الايام المحجوزه
                                     </label>
                                     <input
                                         type="text"
                                         id="ndays"
-                                        className="bg-gray-100 border-prime shadow border-2 p-2 rounded-xl w-28 text-center text-2xl"
+                                        className="bg-blue-50 shadow py-1 rounded w-20 text-center text-2xl"
                                         disabled
                                         value={ndays}
                                     />
+                                    <span className='text-xl ms-2'>
+                                        يوم
+                                    </span>
                                 </div>
                                 <div className="flex items-center mb-3">
-                                    <label htmlFor="bill" className="text-2xl me-5">
-                                        الدفع
+                                    <label htmlFor="bill" className="text-2xl me-10">
+                                        المبلغ الاجمالى
                                     </label>
                                     <input
                                         type="text"
                                         id="bill"
-                                        className="bg-gray-100 border-prime shadow border-2 p-2 rounded-xl w-24 text-center text-xl"
+                                        className="bg-blue-50 shadow py-1 rounded w-20 text-center text-2xl"
                                         disabled
                                         value={bill}
                                     />
-                                    <span className="text-xl ms-3">جنيه مصرى</span>
+                                    <span className="text-xl ms-3">جنيه </span>
                                 </div>
                                 <div className="flex items-center mb-3">
                                     <label htmlFor="fromDate" className="text-2xl me-5">
@@ -231,14 +234,14 @@ export default function RoomDetails() {
                                         <input
                                             type="text"
                                             id="toDate"
-                                            className="bg-gray-100 border-prime border-2 shadow p-2 rounded-xl w-60 text-center text-2xl"
+                                            className="bg-blue-50 shadow py-1 rounded w-full text-center text-2xl"
                                             disabled
                                             value={formatDate(dateRange[0])}
                                         />
                                     ) : (<input
                                         type="text"
                                         id="toDate"
-                                        className="bg-gray-100 border-prime border-2 shadow p-2 rounded-xl w-60 text-center text-2xl"
+                                        className="bg-blue-50 shadow py-1 rounded w-full text-center text-2xl"
                                         disabled
                                     />)}
                                 </div>
@@ -250,7 +253,7 @@ export default function RoomDetails() {
                                         <input
                                             type="text"
                                             id="toDate"
-                                            className="bg-gray-100 border-prime border-2 shadow p-2 rounded-xl w-60 text-center text-2xl"
+                                            className="bg-blue-50 shadow py-1 rounded w-full text-center text-2xl"
                                             disabled
                                             value={formatDate(dateRange[1])}
                                         />
@@ -258,7 +261,7 @@ export default function RoomDetails() {
                                         <input
                                             type="text"
                                             id="toDate"
-                                            className="bg-gray-100 border-prime border-2 shadow p-2 rounded-xl w-60 text-center text-2xl"
+                                            className="bg-blue-50 shadow py-1 rounded w-full text-center text-2xl"
                                             disabled
                                         />
                                     )}

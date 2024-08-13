@@ -11,7 +11,7 @@ const SidebarComponent = () => {
     const linkStyle = `p-5 flex items-center gap-4 w-60 bg-prime-h text-white rounded text-xl shadow hover:bg-prime`;
     return (
         <div className="relative">
-            <button onClick={toggleSidebar} className="fixed flex items-center top-8 left-5 sm:hidden px-3 py-2 rounded-full bg-prime hover:bg-prime-h text-white z-50">
+            <button onClick={toggleSidebar} className="fixed flex items-center top-4 left-5 sm:hidden px-3 py-2 rounded-full bg-prime hover:bg-prime-h text-white z-50">
                 {isOpen ? <i className="pi pi-times text-2xl"></i> : <i className="pi pi-bars text-2xl"></i>}
             </button>
             <div className={`fixed sm:sticky sm:top-5 mt-16 right-0 h-full z-10 sm:h-screen bg-slider shadow-2xl w-72 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full sm:translate-x-0'}`}>

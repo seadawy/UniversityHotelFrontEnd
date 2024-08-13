@@ -93,41 +93,41 @@ const AdminLayout = () => {
                     <div className="p-4">
                         <Outlet></Outlet>
                     </div>
-                    <footer className="bg-prime text-white py-6">
+                    <footer className="bg-prime text-white py-4 p-4">
                         <div className="container mx-auto text-center">
-                            <div className="flex flex-col md:flex-row justify-evenly items-start space-y-6 md:space-y-0 md:space-x-6">
+                            <div className="flex flex-col md:flex-row justify-around items-center space-y-2 md:space-y-0 md:space-x-4">
                                 <div className="bg-white rounded-lg p-2">
-                                    <img src="/logo.png" width="80" alt="University Hotel Logo" />
+                                    <img src="/logo.png" width="80" alt="logo" />
                                 </div>
-                                <div className="text-center md:text-right">
-                                    <p>تم تطوير موقع فندق الجامعة من خلال فريق من كلية الحاسبات تحت إشراف:</p>
-                                    <p><strong>أ.م.د/ أحمد العشري</strong> - أستاذ مساعد</p>
-                                    <p><strong>م.م/ محمد فتح الله</strong> - مهندس ومدرس مساعد</p>
+                                <div className="text-xl pt-5">
+                                    تم تطوير موقع فندق الجامعه
+                                    <br />
+                                    من خلال فريق من كلية الحاسبات
                                 </div>
-                                <div className="text-center md:text-right">
-                                    <h2 className="font-bold text-lg">Back-end</h2>
-                                    <p>محمد عادل</p>
-                                    <p>محمد لطفي</p>
+                                <div className="flex flex-col items-start">
+                                    <h1 className="mt-1 text-2xl"> <strong>تحت اشراف</strong></h1>
+                                    <li>
+                                        استاذ مساعد دكتور احمد العشرى
+                                    </li>
+                                    <li>
+                                        مدرس مساعد مهندس محمد فتح الله
+                                    </li>
                                 </div>
-                                <div className="text-center md:text-right">
-                                    <h2 className="font-bold text-lg">Front-end</h2>
-                                    <p>عبدالرحمن سعداوي</p>
+                                <div className="flex flex-col items-start">
+                                    <h1 className="text-2xl"> <strong>Back-end</strong></h1>
+                                    <li>محمد عادل</li>
+                                    <li>محمد لطفى</li>
                                 </div>
-                                <div className="text-center md:text-right">
-                                    <p>الطلاب المذكورين مقيدون بالفرقة الرابعة</p>
-                                    <p>كلية الحاسبات والمعلومات، جامعة كفر الشيخ</p>
+                                <div className="flex flex-col items-start">
+                                    <h1 className="text-2xl"> <strong>Front-end</strong></h1>
+                                    <li>عبدالرحمن اسامة سعداوى</li>
                                 </div>
                             </div>
                         </div>
                     </footer>
-
-
                 </div>
             </div>
-
-
         </>
-
     );
 }
 

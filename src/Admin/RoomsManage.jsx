@@ -6,7 +6,7 @@ import DialogComponent from "./Component/DialogComponent";
 import { useAuthContext } from "../Auth/useAuthContext";
 
 const RoomsManage = () => {
-    const { token } = useAuthContext();
+    const { token, user } = useAuthContext();
     const [rooms, setRooms] = useState([]);
     const [roomsFilter, setRoomsFilter] = useState([]);
     const [open, setOpen] = useState(false);
@@ -37,13 +37,17 @@ const RoomsManage = () => {
             name: "الأدوات",
             selector: row => (
                 <div className="flex gap-3 justify-center items-center">
-                    <Link className="rounded bg-prime text-white py-2 px-3" to={`/RoomsManage/Edit/${row.id}`}>
-                        تعديل الغرفة
-                    </Link>
-                    <button className="font-medium rounded text-sm bg-red-600 text-white py-2 px-3" onClick={() => openDelDialog(row.id)}>
-                        حذف
-                    </button>
-                </div>
+                    {user.role != "Receptionist" ?
+                        <>
+                            <Link className="rounded bg-prime text-white py-2 px-3" to={`/RoomsManage/Edit/${row.id}`}>
+                                تعديل الغرفة
+                            </Link>
+                            <button className="font-medium rounded text-sm bg-red-600 text-white py-2 px-3" onClick={() => openDelDialog(row.id)}>
+                                حذف
+                            </button>
+                        </> : <p className="text-gray-400 text-lg">ليس لديك صلحيات</p>
+                    }
+                </div >
             ),
         },
     ];
