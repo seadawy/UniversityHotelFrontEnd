@@ -1,13 +1,18 @@
-# React + Vite
+# University Hotel
+hello there i was responsible for the front end of the hotel website and I chose the powerful library react.js to use through
+the process using the .net API endpoint I received from the wonderful back-end team I was able to create reliable and easy-to-use
+website to help all actors in the system super admin, Vice Dean, receptionist and gust
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Demo
 
-Currently, two official plugins are available:
+If your project is hosted online, add a link to the live version:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[Live Demo](https://your-demo-link.com)
 
+## Features
 
-<!-- SUBER ADMIN -->
+List the key features of your project:
 
-<!-- Usal User -->
+- easy-to-use
+- self-described functionality
+- responsive design
