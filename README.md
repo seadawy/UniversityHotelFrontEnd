@@ -5,9 +5,7 @@ website to help all actors in the system super admin, Vice Dean, receptionist an
 
 ## Demo
 
-If your project is hosted online, add a link to the live version:
-
-[Live Demo](https://your-demo-link.com)
+[Live Demo](http://195.246.54.208/)
 
 ## Features
 
