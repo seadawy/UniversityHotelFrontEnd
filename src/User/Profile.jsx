@@ -33,9 +33,9 @@ export default function Profile() {
 
         // National information
         setNationalId(user.nationalId);
-        setProfile(`http://localhost:5231/Users/PI/${user.profilePic}`);
-        setFront(`http://localhost:5231/Users/NI/${user.nationalPicFront}`);
-        setBack(`http://localhost:5231/Users/NI/${user.nationalPicBack}`);
+        setProfile(`https://localhost:44356/Users/PI/${user.profilePic}`);
+        setFront(`https://localhost:44356/Users/NI/${user.nationalPicFront}`);
+        setBack(`https://localhost:44356/Users/NI/${user.nationalPicBack}`);
     }, [personalState, nationalState, user]);
 
     const [errors, setErrors] = useState({});

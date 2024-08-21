@@ -24,11 +24,11 @@ export default function Login() {
                 "Content-Type": "application/json",
             },
         }).then((res => res.json())).then((data) => {
-            if (data.message === null) {
+            if (data.errors.pubErr.length === 0) {
                 localStorage.setItem('token', data.token);
                 login(data.token);
             } else {
-                setError(data.message);
+                setError(data.errors.pubErr);
             }
             setLoading(false);
         }).catch(err => console.log(err));

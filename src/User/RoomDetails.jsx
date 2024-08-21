@@ -30,7 +30,7 @@ export default function RoomDetails() {
         return (
             <div className='h-full w-full overflow-hidden flex justify-center items-center'>
                 <img
-                    src={`http://localhost:5231/Rooms/Images/${item.image}`}
+                    src={`https://localhost:44356/Rooms/Images/${item.image}`}
                     className='h-full w-full object-cover rounded-md'
                     alt={item.id}
                     style={{ display: 'block' }}

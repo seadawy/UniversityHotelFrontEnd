@@ -75,7 +75,7 @@ const Register = () => {
             method: "POST",
             body: SForm
         }).then(res => res.json()).then((data) => {
-            if (data.errors) {
+            if (!data.isAuthenticated) {
                 setErrors(data.errors);
             } else {
                 localStorage.setItem('token', data.token);
@@ -137,6 +137,7 @@ const Register = () => {
                             </label>
                             <input className={inputStyle} id="Email" type="email" value={Email} onChange={(e) => setEmail(e.target.value)} />
                             {errors.Email && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.Email}</p>}
+                            {errors.email && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.email}</p>}
                         </div>
                     </div>
                     {/* Gender */}
@@ -196,6 +197,7 @@ const Register = () => {
                             </label>
                             <input className={inputStyle} id="grid-area" type="text"
                                 value={area} onChange={(e) => setArea(e.target.value)} />
+                            {errors.region && <p className="text-red-500 text-sm m-1 mb-3 tracking-wider">{errors.region}</p>}                    
                         </div>
                         <div className="md:w-1/2 mb-2 px-3">
                             <label className={labelStyle} htmlFor="grid-street">
@@ -238,6 +240,7 @@ const Register = () => {
                                 onChange={handleFrontFileChange}
                             />
                             {errors.NationalIdPicFront && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.NationalIdPicFront}</p>}
+                            {errors.uploadFront && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.uploadFront}</p>}
                         </div>
                         {/* Back Card */}
                         <div className="md:w-1/2 px-3 mt-1">
@@ -260,6 +263,7 @@ const Register = () => {
                                 onChange={handleBackFileChange}
                             />
                             {errors.NationalIdPicBack && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.NationalIdPicBack}</p>}
+                            {errors.uploadBack && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.uploadBack}</p>}
                         </div>
                     </div>
                     {/* ProfilePic */}
@@ -283,6 +287,7 @@ const Register = () => {
                                 type="file"
                                 onChange={handleFileChange}
                             />
+                            {errors.uploadProfile && <p className="text-red-500 text-sm m-1 mb-3 tracking-wider">{errors.uploadProfile}</p>}
                         </div>
                     </div>
                     {/* Employee */}
@@ -302,6 +307,7 @@ const Register = () => {
                             </label>
                             <input className={inputStyle} id="grid-password" type="password" placeholder="*******" value={Password} onChange={(e) => setPassword(e.target.value)} />
                             {errors.Password && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من ملء الحقل على الاقل 8 حروف او ارقام</p>}
+                            {errors.password && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من ملء الحقل على الاقل 8 حروف او ارقام</p>}
                         </div>
                     </div>
                     {/* Confirm Password */}

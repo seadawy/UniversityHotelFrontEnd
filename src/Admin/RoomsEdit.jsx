@@ -250,7 +250,7 @@ const RoomsEdit = () => {
                                 <div key={si} className='relative group cursor-pointer' onClick={() => DelImg(img.id)}>
                                     <img
                                         className='w-32 rounded-md shadow'
-                                        src={`http://localhost:5231/Rooms/Images/${img.image}`}
+                                        src={`https://localhost:44356/Rooms/Images/${img.image}`}
                                         alt='Room'
                                     />
                                     <div className='bg-red-700 bg-opacity-75 rounded-md absolute top-0 w-full h-full flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
