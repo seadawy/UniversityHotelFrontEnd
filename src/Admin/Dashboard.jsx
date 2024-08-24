@@ -27,6 +27,10 @@ const Dashboard = () => {
         labels: [],
         salesData: []
     });
+    const [quarterlyYEARData, setQuarterlyYEARData] = useState({
+        labels: [],
+        salesData: []
+    });
 
     useEffect(() => {
         fetch('/api/HotelAuth/CountOfUsers', {
@@ -89,12 +93,25 @@ const Dashboard = () => {
                 salesData: salesData
             });
         }).catch(err => console.log(err));
+
+        fetch('/api/Statistics/lastYearRevenueQuarterStatistics', {
+            headers: {
+                "authorization": `Bearer ${token}`
+            }
+        }).then(res => res.json()).then(data => {
+            const labels = data.map(item => item.quarter);
+            const salesData = data.map(item => item.total);
+            setQuarterlyYEARData({
+                labels: labels,
+                salesData: salesData
+            });
+        }).catch(err => console.log(err));
+
     }, []);
 
-    const textColor = '#0069D2';
     const textColorSecondary = '#666666';
     const surfaceBorder = '#CCCCCC';
-
+    /* DATA */
     const dataPie = {
         labels: ['الغرف المتاحه', 'الغرف المحجوزه'],
         datasets: [
@@ -129,7 +146,7 @@ const Dashboard = () => {
         ]
     };
     const QuartChartData = {
-        labels: ["الاسبوع 1", "الاسبوع 2", "الاسبوع 3", "الاسبوع 4"],
+        labels: ["الاسبوع الاول", "الاسبوع الثانى", "الاسبوع الثالث", "الاسبوع الرابع"],
         datasets: [
             {
                 label: ["data"],
@@ -149,33 +166,12 @@ const Dashboard = () => {
                 borderWidth: 1
             }
         ]
-    };
-    const QuartChartOptions = {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        },
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            tooltip: {
-                callbacks: {
-                    label: function (tooltipItem) {
-                        return `Total: ${tooltipItem.raw.toLocaleString('ar-EG')} ج.م`;
-                    }
-                }
-            }
-        }
     };
     const QuartYChartData = {
         labels: ["الربع الاول", "الربع الثانى", "الربع الثالث", "الربع الرابع"],
         datasets: [
             {
-                label: ["data"],
-                data: quarterlyData.salesData,
+                data: quarterlyYEARData.salesData,
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
@@ -192,35 +188,40 @@ const Dashboard = () => {
             }
         ]
     };
-    const QuartYChartOptions = {
+    /* OPTIONS */
+    const QuartChartOptions = {
         scales: {
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+            },
+            x: {
+                ticks: {
+                    font: {
+                        family: 'Alexandria',
+                    }
+                }
             }
         },
         responsive: true,
         plugins: {
             legend: {
-                position: 'top',
+                display: false
             },
             tooltip: {
                 callbacks: {
                     label: function (tooltipItem) {
-                        return `Total: ${tooltipItem.raw.toLocaleString('ar-EG')} ج.م`;
+                        return `${tooltipItem.raw.toLocaleString('ar-EG')} ج.م`;
                     }
                 }
             }
         }
     };
-
     const chartOptions = {
         maintainAspectRatio: false,
         aspectRatio: 0.6,
         plugins: {
             legend: {
-                labels: {
-                    color: textColor
-                }
+                display: false
             }
         },
         scales: {
@@ -242,13 +243,12 @@ const Dashboard = () => {
             }
         }
     };
-
     const toArabicNumerals = (number) => {
         return number.toLocaleString('ar-EG');
-    }
-
+    };
     return (
         <div className='grid grid-cols-12 gap-4 mt-20'>
+            {/* Basic Links  */}
             <div className='grid col-start-1 col-end-13 grid-flow-col gap-3'>
                 <Link to="/users" className='bg-blue-200 hover:bg-gray-400 hover:text-white py-8 relative rounded-md shadow flex gap-4 flex-col items-center'>
                     <i className='pi pi-users font-light text-6xl'></i>
@@ -266,6 +266,8 @@ const Dashboard = () => {
                     <span className='absolute top-2 left-3 bg-red-500 px-1.5 py-1 rounded-full text-white'>{toArabicNumerals(nComp)}</span>
                 </Link>
             </div>
+
+            {/* Quick statics and Pie*/}
             <div className='grid col-start-1 col-end-13 grid-flow-col gap-3'>
                 <div className='grid col-start-1 col-end-2 bg-white rounded-md shadow-md '>
                     <div className='text-center bg-prime h-fit text-white py-4 rounded-b-3xl rounded-t-md'>
@@ -285,7 +287,6 @@ const Dashboard = () => {
                         <Chart type="pie" data={dataPie} className="w-80" />
                     </div>
                 </div>
-
                 <div className='w-full col-start-2 col-end-13 bg-white rounded-md shadow-md'>
                     <div className='text-center bg-prime text-white py-4 rounded-b-3xl rounded-t-md'>
                         احصائيات سريعه من اخر 30 يوم
@@ -315,6 +316,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
+            {/* Requests  */}
             <div className='grid col-start-1 col-end-13 grid-flow-col gap-3'>
                 <div className='bg-white rounded-md shadow-md p-0'>
                     <div className='text-center bg-prime text-white py-4 rounded-b-3xl rounded-t-md'>
@@ -326,6 +328,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
+            {/* Reveune */}
             <div className='grid col-start-1 col-end-13 grid-flow-col gap-3'>
                 <div className='bg-white rounded-md shadow-md p-0'>
                     <div className='text-center bg-prime text-white py-4 rounded-b-3xl rounded-t-md'>
@@ -336,30 +339,34 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            <div className='grid col-start-1 col-end-13 grid-flow-col gap-3'>
-                <div className='bg-white rounded-md shadow-md p-0 w-full col-span-6 col-start-1 col-end-6'>
-                    <div className='text-center bg-prime text-white py-4 rounded-b-3xl rounded-t-md'>
-                        إحصائيات الاسبوعى
+
+            {/* weekly and yearly */}
+            <div className='grid col-start-1 col-end-13 grid-flow-col '>
+                <div className='flex gap-3'>
+                    <div className='bg-white rounded-md shadow-md p-0 w-full'>
+                        <div className='text-center bg-prime text-white py-4 rounded-b-3xl rounded-t-md'>
+                            إحصائيات الاسبوعى
+                        </div>
+                        <div className='px-5 py-2'>
+                            <center>
+                                <Chart type="bar" data={QuartChartData} options={QuartChartOptions} />
+                            </center>
+                        </div>
                     </div>
-                    <div className='px-5 py-2'>
-                        <center>
-                            <Chart type="bar" data={QuartChartData} options={QuartChartOptions} />
-                        </center>
-                    </div>
-                </div>
-                <div className='bg-white rounded-md shadow-md p-0 w-full col-span-6 col-start-6 col-end-13'>
-                    <div className='text-center bg-prime text-white py-4 rounded-b-3xl rounded-t-md'>
-                        إحصائيات الربع سنوى
-                    </div>
-                    <div className='px-5 py-2'>
-                        <center>
-                            <Chart type="bar" data={QuartYChartData} options={QuartYChartOptions} />
-                        </center>
+                    <div className='bg-white rounded-md shadow-md p-0 w-full'>
+                        <div className='text-center bg-prime text-white py-4 rounded-b-3xl rounded-t-md'>
+                            إحصائيات الربع سنوى
+                        </div>
+                        <div className='px-5 py-2'>
+                            <center>
+                                <Chart type="bar" data={QuartYChartData} options={QuartChartOptions} />
+                            </center>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Dashboard;

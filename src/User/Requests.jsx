@@ -30,17 +30,17 @@ export default function Requests() {
 
     const statusTemplate = (rowData) => {
         if (rowData.isRejected) {
-            return <Tag severity="danger" value="مرفوض" />;
+            return <Tag severity="danger" className='min-w-24 rounded-xl' value="مرفوض" />;
         } else if (rowData.isDeleted) {
-            return <Tag severity="danger" value="ملفى" />;
+            return <Tag severity="danger" className='min-w-24 rounded-xl' value="ملفى" />;
         } else if (rowData.checkin) {
-            return <Tag severity="info" value="تم الاستلام" />;
+            return <Tag severity="info" className='min-w-24 rounded-xl' value="تم الاستلام" />;
         } else if (rowData.isApproved) {
-            return <Tag severity="success" value="مقبول" />;
+            return <Tag severity="success" className='min-w-24 rounded-xl' value="مقبول" />;
         } else if (rowData.checkout) {
-            return <Tag severity="info" value="تم المغادرة" />;
+            return <Tag severity="info" className='min-w-24 rounded-xl' value="تم المغادرة" />;
         } else {
-            return <Tag severity="warning" value="انتظار" />;
+            return <Tag severity="warning" className='min-w-24 rounded-xl' value="انتظار" />;
         }
     };
 
@@ -71,15 +71,15 @@ export default function Requests() {
 
     const rqTable = [
         { name: "رقم الغرفة", selector: FirstCol, sortable: true, width: "150px" },
-        { name: "الحاله", selector: statusTemplate, sortable: true, width: "140px" },
-        { name: "السعر", selector: row => (row.price).toLocaleString('ar-EG', { style: 'currency', currency: 'EGP' }), sortable: true, width: "150px" },
-        { name: "وقت الارسال", selector: row => new Date(row.bookedAt).toLocaleDateString('ar-EG'), sortable: true, width: "160px" },
-        { name: "من", selector: row => new Date(row.startDate).toLocaleDateString('ar-EG'), sortable: true, width: "120px" },
-        { name: "الى", selector: row => new Date(row.endDate).toLocaleDateString('ar-EG'), sortable: true, width: "120px" },
+        { name: "الحاله", selector: statusTemplate, sortable: true, width: "180px" },
+        { name: "السعر", selector: row => (row.price).toLocaleString('ar-EG', { style: 'currency', currency: 'EGP' }), sortable: true, width: "200px" },
+        { name: "وقت الارسال", selector: row => new Date(row.bookedAt).toLocaleDateString('ar-EG'), sortable: true, width: "170px" },
+        { name: "من", selector: row => new Date(row.startDate).toLocaleDateString('ar-EG'), sortable: true, width: "130px" },
+        { name: "الى", selector: row => new Date(row.endDate).toLocaleDateString('ar-EG'), sortable: true, width: "150px" },
         {
             name: "الادوات", selector: row => (
                 <>
-                    {!row.isApproved && !row.isRejected && !row.isDeleted && !row.checkin  && !row.checkout?
+                    {!row.isApproved && !row.isRejected && !row.isDeleted && !row.checkin && !row.checkout ?
                         <button className='bg-red-700 p-1.5 px-3 rounded text-white' onClick={() => CancelReq(row.id)} > الغاء</button> :
                         <p className='text-lg text-slate-500'>لا يوجد اجراء</p>
                     }
@@ -94,7 +94,7 @@ export default function Requests() {
                 <h1 className='font-bold text-4xl sm:text-start sm:w-full sm:ps-10 font-Beiruti'>سِجل الطلبات</h1>
                 <div className='p-5'>
                     <DataTable
-                        className="shadow-md rounded-lg"
+                        className="shadow-md"
                         columns={rqTable}
                         data={requests}
                         pagination

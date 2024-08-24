@@ -106,7 +106,7 @@ export default function RequestManage() {
     };
 
     const renderSearchBox = (filter, setFilter, placeholder) => (
-        <div className="flex mb-2">
+        <div className="flex mb-2 gap-2">
             <input
                 type="text"
                 value={filter}
@@ -116,9 +116,9 @@ export default function RequestManage() {
             />
             <button
                 onClick={() => setFilter('')}
-                className="ml-2 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                className="ml-2 px-4 py-2 flex items-center justify-center bg-gray-300 rounded hover:bg-gray-400"
             >
-                مسح
+                <i className='font-bold text-2xl pi pi-times'></i>
             </button>
         </div>
     );

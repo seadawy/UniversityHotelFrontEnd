@@ -24,7 +24,7 @@ export default function Login() {
                 "Content-Type": "application/json",
             },
         }).then((res => res.json())).then((data) => {
-            if (data.errors.pubErr.length === 0) {
+            if (data.isAuthenticated) {
                 localStorage.setItem('token', data.token);
                 login(data.token);
             } else {

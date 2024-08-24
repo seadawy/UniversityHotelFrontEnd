@@ -149,15 +149,15 @@ const UsersView = () => {
                         <div>
                             <div className="mb-6 flex flex-col object-fill">
                                 <label className="font-semibold text-2xl mb-2 text-gray-700">صورة شخصيه</label>
-                                <Image src={person.profilePic ? `https://localhost:44356/users/PI/${person.profilePic}` : `/img/defaultProfile.webp`} alt="الشخصيه" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
+                                <Image src={person.profilePic ? `http://localhost:5231/users/PI/${person.profilePic}` : `/img/defaultProfile.webp`} alt="الشخصيه" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
                             </div>
                             <div className="mb-6 flex flex-col object-fill">
                                 <label className="font-semibold text-2xl mb-2 text-gray-700">صورة الهوية (الواجهة)</label>
-                                <Image src={`https://localhost:44356/users/NI/${person.nationalPicFront}`} alt="الواجهة" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
+                                <Image src={`http://localhost:5231/users/NI/${person.nationalPicFront}`} alt="الواجهة" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
                             </div>
                             <div className="mb-6 flex flex-col object-fill">
                                 <label className="font-semibold text-2xl mb-2 text-gray-700">صورة الهوية (الخلفية)</label>
-                                <Image src={`https://localhost:44356/users/NI/${person.nationalPicBack}`} alt="الخلفية" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
+                                <Image src={`http://localhost:5231/users/NI/${person.nationalPicBack}`} alt="الخلفية" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
                             </div>
                         </div>
                     </div>

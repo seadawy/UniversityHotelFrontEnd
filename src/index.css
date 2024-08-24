@@ -71,10 +71,6 @@ span[data-p-disabled="true"] {
 }
 
 /* table */
-.p-datatable-wrapper {
-    border-radius: 8px;
-}
-
 .p-datatable {
     padding: 20px 25px;
 }
@@ -103,7 +99,6 @@ span[data-p-disabled="true"] {
 .p-datepicker-year {
     background-color: #004b6f;
     color: white;
-    border-radius: 5px;
 }
 
 .p-paginator-element.p-link.p-highlight {
@@ -130,7 +125,7 @@ span[data-p-disabled="true"] {
 }
 
 .gMeyEf {
-    border-radius: 10px 10px 0 0 !important;
+    border-radius: 5px !important;
 }
 
 .p-image {
@@ -141,4 +136,8 @@ span[data-p-disabled="true"] {
 .p-icon.p-accordion-toggle-icon {
     position: absolute;
     left: 25px;
+}
+
+.p-datepicker-today span {
+    background-color: transparent;
 }

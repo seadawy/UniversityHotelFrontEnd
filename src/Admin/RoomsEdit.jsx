@@ -18,6 +18,7 @@ const RoomsEdit = () => {
     const [PriceStuff, setPriceStuff] = useState("");
     const [RegionId, setRegionId] = useState("");
     const [RoomImage, setRoomImage] = useState([]);
+    const [deletingImageId, setDeletingImageId] = useState(null);
 
     useEffect(() => {
         fetch('/api/HotelRegions')
@@ -26,19 +27,20 @@ const RoomsEdit = () => {
             .catch(err => console.log(err));
     }, []);
 
+    const loadRoom = () => fetch(`/api/Rooms/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            setRoomNumber(data.roomNumber || "");
+            setRoomImage(data.images || []);
+            setNumberOfBeds(data.numberOfBeds || "");
+            setAirConditioned(data.airConditioned || false);
+            setPrice(data.guestPrice || "");
+            setPriceStuff(data.stuffPrice || "");
+            setRegionId(data.regionId || "");
+        })
+        .catch(err => console.log(err));
     useEffect(() => {
-        fetch(`/api/Rooms/${id}`)
-            .then(res => res.json())
-            .then(data => {
-                setRoomNumber(data.roomNumber || "");
-                setRoomImage(data.images || []);
-                setNumberOfBeds(data.numberOfBeds || "");
-                setAirConditioned(data.airConditioned || false);
-                setPrice(data.guestPrice || "");
-                setPriceStuff(data.stuffPrice || "");
-                setRegionId(data.regionId || "");
-            })
-            .catch(err => console.log(err));
+        loadRoom();
     }, [id]);
 
     // Images
@@ -105,16 +107,24 @@ const RoomsEdit = () => {
             .catch(err => {
                 setError(true);
                 setLoading(false);
-            });
+            }).finally(() => {
+                setImages([]);
+                loadRoom();
+            })
     };
 
     const DelImg = (imgId) => {
-        fetch(`/api/RoomImages`, {
+        if (RoomImage.length < 2) {
+            setError(true);
+            return;
+        }
+        setLoading(true);
+        setDeletingImageId(imgId);
+        fetch(`/api/RoomImages?id=${imgId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ "id": imgId })
         })
             .then(res => {
                 if (res.ok) {
@@ -123,9 +133,12 @@ const RoomsEdit = () => {
                     setError(true);
                 }
             })
-            .catch(err => setError(true));
+            .catch(err => setError(true))
+            .finally(() => {
+                setLoading(false);
+                setDeletingImageId(null);
+            });
     };
-
     return (
         <div className="mt-20 mx-3">
             <div className="border-2 bg-white border-gray-400 rounded p-3 flex flex-row items-center select-none shadow-md">
@@ -154,6 +167,7 @@ const RoomsEdit = () => {
                         <div className="w-1/2">
                             <label htmlFor="NumberOfBeds" className={labelStyle}>عدد الأسرة</label>
                             <input
+                                required
                                 className={inputStyle}
                                 id="NumberOfBeds"
                                 type="number"
@@ -169,6 +183,7 @@ const RoomsEdit = () => {
                             <label className={labelStyle}>مكيف</label>
                             <div className="flex items-center">
                                 <input
+                                    required
                                     className="ml-2 w-8 h-8"
                                     id="AirConditionedYes"
                                     type="radio"
@@ -179,6 +194,7 @@ const RoomsEdit = () => {
                                 />
                                 <label htmlFor="AirConditionedYes" className="ml-4 text-xl font-bold">نعم</label>
                                 <input
+                                    required
                                     className="mr-4 w-8 h-8"
                                     id="AirConditionedNo"
                                     type="radio"
@@ -193,6 +209,7 @@ const RoomsEdit = () => {
                         <div className='w-full mr-10'>
                             <label htmlFor="Price" className={labelStyle}>السعر</label>
                             <input
+                                required
                                 className={inputStyle}
                                 id="Price"
                                 min={1}
@@ -204,6 +221,7 @@ const RoomsEdit = () => {
                         <div className='w-full mr-10'>
                             <label htmlFor="PriceStfu" className={labelStyle}>السعر للموظفين بالجامعه</label>
                             <input
+                                required
                                 className={inputStyle}
                                 id="PriceStfu"
                                 min={1}
@@ -217,6 +235,7 @@ const RoomsEdit = () => {
                     <div className="mb-6">
                         <label htmlFor="RegionId" className={labelStyle}>معرف المنطقة</label>
                         <select
+                            required
                             className={`${inputStyle} py-3.5`}
                             id="RegionId"
                             value={RegionId}
@@ -228,7 +247,7 @@ const RoomsEdit = () => {
                         </select>
                     </div>
 
-                    <div>
+                    <div className='mb-10'>
                         <label htmlFor="fileinput" className={labelStyle}>صور الغرفه</label>
                         <div {...getRootProps()} className='bg-blue-50 p-5 rounded shadow mb-3 border-4 border-dashed border-prime'>
                             <input {...getInputProps()} />
@@ -249,10 +268,16 @@ const RoomsEdit = () => {
                             {RoomImage && RoomImage.map((img, si) => (
                                 <div key={si} className='relative group cursor-pointer' onClick={() => DelImg(img.id)}>
                                     <img
-                                        className='w-32 rounded-md shadow'
-                                        src={`https://localhost:44356/Rooms/Images/${img.image}`}
+                                        className={`w-32 rounded-md shadow ${deletingImageId === img.id ? 'opacity-50' : ''}`}
+                                        src={`http://localhost:5231/Rooms/Images/${img.image}`}
                                         alt='Room'
                                     />
+                                    {/* Overlay spinner and dimmed background during loading */}
+                                    {deletingImageId === img.id && (
+                                        <div className='absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+                                            <i className='pi pi-spin pi-spinner text-3xl text-white'></i>
+                                        </div>
+                                    )}
                                     <div className='bg-red-700 bg-opacity-75 rounded-md absolute top-0 w-full h-full flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
                                         <i className='pi pi-trash text-3xl text-white'></i>
                                     </div>
@@ -271,7 +296,7 @@ const RoomsEdit = () => {
                                 </div>
                             }
                         />}
-                        {error && <Message className="absolute border-red-800 bg-red-100 p-2 border-r-8 bottom-0 right-0 w-fit"
+                        {error && <Message className="absolute border-red-800 bg-red-100 p-2 mt-4 border-r-8 -bottom-1 right-0 w-fit"
                             severity="error"
                             content={
                                 <div className="flex justify-start items-center">
@@ -279,6 +304,7 @@ const RoomsEdit = () => {
                                     <div className="ml-2">
                                         <li>لم يتم تعديل الغرفة بسبب حدوث خطأ</li>
                                         <li>تأكد من ملئ كل الحقول المطلوبة</li>
+                                        <li>يجب وجود صوره واحده على الاقل</li>
                                     </div>
                                 </div>
                             }

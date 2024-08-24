@@ -20,23 +20,22 @@ const UsersManage = () => {
     }, []);
 
     const columns = [
-        { name: "الاسم", selector: row => row.fullName, sortable: true },
+        { name: "الاسم", selector: row => row.fullName, sortable: true, width: "280px" },
         {
             name: "الرقم قومى",
             selector: row => row.nationalId,
         },
-        { name: "المنطقة", selector: row => row.region, sortable: true, width: "150px" },
+        { name: "البريد الالكترونى", selector: row => row.email, sortable: true, width: "300px" },
         { name: "الهاتف", selector: row => row.phoneNumber ? row.phoneNumber : "لا يوجد", sortable: true },
         {
             name: "الأدوات",
             selector: row => (
                 <div className="flex gap-3 justify-center items-center">
-                    <Link className="rounded bg-blue-600 text-white py-2 px-3" to={`/Users/View/${row.userName}`}>
+                    <Link className="rounded bg-blue-600 text-lg text-white py-1 px-4 flex gap-3 items-center" to={`/Users/View/${row.userName}`}>
+                        <i className="pi pi-eye"></i>
                         مراجعة البيانات
                     </Link>
-                    <Link className="rounded bg-red-600 text-white py-2 px-3" to={`/Users/View/${row.userName}`}>
-                       حذف
-                    </Link>
+
                 </div>
             ),
         },
@@ -48,6 +47,7 @@ const UsersManage = () => {
             row.fullName.toLowerCase().includes(searchTerm) ||
             row.nationalId.toLowerCase().includes(searchTerm) ||
             row.region.toLowerCase().includes(searchTerm) ||
+            row.email.toLowerCase().includes(searchTerm) ||
             (row.phoneNumber ? row.phoneNumber.toLowerCase().includes(searchTerm) : false)
         );
         setUsersFilter(newData);

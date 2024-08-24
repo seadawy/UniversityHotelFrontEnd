@@ -26,11 +26,11 @@ const RoomsManage = () => {
         { name: "رقم الغرفة", selector: row => row.roomNumber, sortable: true, width: "150px" },
         {
             name: "الحالة",
-            selector: row => row.isCheckedIn ? <Tag severity="danger" value="محجوزه" /> : <Tag severity="info" value="متاحه" />,
+            selector: row => row.isCheckedIn ? <Tag severity="danger" className='min-w-24 rounded-xl' value="محجوزه" /> : <Tag severity="info" className='min-w-24 rounded-xl' value="متاحه" />,
             sortable: true,
-            width: "100px"
+            width: "150px"
         },
-        { name: "السعر", selector: row => row.guestPrice, sortable: true, width: "100px" },
+        { name: "السعر", selector: row => row.guestPrice, sortable: true, width: "180px" },
         { name: "السعر للموظف", selector: row => row.stuffPrice, sortable: true },
         { name: "المنطقة", selector: row => row.regionName, sortable: true },
         {
@@ -39,7 +39,8 @@ const RoomsManage = () => {
                 <div className="flex gap-3 justify-center items-center">
                     {user.role != "Receptionist" ?
                         <>
-                            <Link className="rounded bg-prime text-white py-2 px-3" to={`/RoomsManage/Edit/${row.id}`}>
+                            <Link className="rounded bg-prime text-white text-lg py-1 px-3 flex gap-3 items-center" to={`/RoomsManage/Edit/${row.id}`}>
+                                <i className="pi pi-pen-to-square"></i>
                                 تعديل الغرفة
                             </Link>
                             <button className="font-medium rounded text-sm bg-red-600 text-white py-2 px-3" onClick={() => openDelDialog(row.id)}>
