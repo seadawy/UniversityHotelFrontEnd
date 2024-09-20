@@ -17,7 +17,7 @@ export default function Login() {
             'email': email, 'password': password
         }
 
-        fetch('/api/HotelAuth/gettoken', {
+        fetch('http://hotelkfs.runasp.net/api/HotelAuth/gettoken', {
             method: 'POST',
             body: JSON.stringify(loginDataForm),
             headers: {

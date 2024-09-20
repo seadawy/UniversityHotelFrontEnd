@@ -21,13 +21,13 @@ const RoomsEdit = () => {
     const [deletingImageId, setDeletingImageId] = useState(null);
 
     useEffect(() => {
-        fetch('/api/HotelRegions')
+        fetch('http://hotelkfs.runasp.net/api/HotelRegions')
             .then(res => res.json())
             .then(data => setRagions(data))
             .catch(err => console.log(err));
     }, []);
 
-    const loadRoom = () => fetch(`/api/Rooms/${id}`)
+    const loadRoom = () => fetch(`http://hotelkfs.runasp.net/api/Rooms/${id}`)
         .then(res => res.json())
         .then(data => {
             setRoomNumber(data.roomNumber || "");
@@ -88,7 +88,7 @@ const RoomsEdit = () => {
             data.append("Images", file);
         });
 
-        fetch(`/api/Rooms/UpdateRoom/${id}`, {
+        fetch(`http://hotelkfs.runasp.net/api/Rooms/UpdateRoom/${id}`, {
             method: "PUT",
             headers: {
                 "authorization": `Bearer ${token}`
@@ -120,7 +120,7 @@ const RoomsEdit = () => {
         }
         setLoading(true);
         setDeletingImageId(imgId);
-        fetch(`/api/RoomImages?id=${imgId}`, {
+        fetch(`http://hotelkfs.runasp.net/api/RoomImages?id=${imgId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -269,7 +269,7 @@ const RoomsEdit = () => {
                                 <div key={si} className='relative group cursor-pointer' onClick={() => DelImg(img.id)}>
                                     <img
                                         className={`w-32 rounded-md shadow ${deletingImageId === img.id ? 'opacity-50' : ''}`}
-                                        src={`http://localhost:5231/Rooms/Images/${img.image}`}
+                                        src={`http://hotelkfs.runasp.net/Rooms/Images/${img.image}`}
                                         alt='Room'
                                     />
                                     {/* Overlay spinner and dimmed background during loading */}

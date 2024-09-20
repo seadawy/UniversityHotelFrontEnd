@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5231',
+        target: 'http://hotelkfs.runasp.net',
         changeOrigin: true,
         secure: false,
       },

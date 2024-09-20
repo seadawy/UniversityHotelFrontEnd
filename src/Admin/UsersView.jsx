@@ -12,9 +12,10 @@ const UsersView = () => {
     const [selectedRole, setSelectedRole] = useState('');
     const { id } = useParams();
     const [formState, setFormState] = useState(true);
+    const [isEmployee, setIsEmployee] = useState(false);
 
     useEffect(() => {
-        fetch(`/api/HotelAuth/user/${id}`, {
+        fetch(`http://hotelkfs.runasp.net/api/HotelAuth/user/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -22,6 +23,7 @@ const UsersView = () => {
             .then(res => res.json())
             .then(data => {
                 setPerson(data);
+                setIsEmployee(data.isEmployee);
             })
             .catch(err => console.log(err));
     }, [id, token, sucess]);
@@ -33,7 +35,7 @@ const UsersView = () => {
                 "userName": id,
                 "role": selectedRole
             };
-            fetch('/api/HotelAuth/addToRole', {
+            fetch('http://hotelkfs.runasp.net/api/HotelAuth/addToRole', {
                 method: "post",
                 headers: {
                     "authorization": `Bearer ${token}`,
@@ -52,6 +54,22 @@ const UsersView = () => {
     }, [sucess])
     if (!person) {
         return <div>جاري التحميل...</div>;
+    }
+
+    const employeeStateChange = () => {
+        fetch("http://hotelkfs.runasp.net/api/HotelAuth/employeeStatus", {
+            method: "PUT",
+            headers: {
+                "authorization": `Bearer ${token}`,
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                "userName": id,
+                "isEmployee": !isEmployee
+            })
+        }).then(res => res.json()).then(data => {
+            setSuccess(true);
+        }).catch(err => console.log(err));
     }
     return (
         <>
@@ -97,6 +115,18 @@ const UsersView = () => {
                                 <label className="font-semibold text-xl text-gray-700 w-36">العنوان</label>
                                 <p className="text-2xl text-gray-900 p-3 border-2 w-full ms-3 rounded shadow-sm">{person.address}</p>
                             </div>
+                            <div className="mb-4 sm:mb-6">
+                                <div className="-mx-2 md:flex my-3">
+                                    <div className="md:w-full px-3 flex gap-2 items-center flex-row">
+                                        <input type="checkbox" name="employee" id="employee" checked={isEmployee} value={isEmployee} onChange={employeeStateChange}
+                                            className='w-12 h-12 me-2' />
+                                        <label htmlFor="employee" className='text-xl'>
+                                            موظف بالجامعه
+                                            <p className='text-base text-gray-500'>يتم تحديد الاسعار بناء على هذا الاختيار</p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             <hr />
                             <hr />
                             <hr />
@@ -105,6 +135,15 @@ const UsersView = () => {
                             <hr />
                             <hr />
                             <hr />
+                            {sucess && <Message className=" border-teal-800 text-teal-950 bg-teal-100 w-full p-2 border-r-8 mt-4 w-fit shadow"
+                                severity="info"
+                                content={
+                                    <div className="flex justify-start items-center">
+                                        <i className='pi pi-check-circle text-3xl mx-5'></i>
+                                        <div className="ml-2">تم تعديل بنجاح</div>
+                                    </div>
+                                }
+                            />}
                             {user.role == "SuperAdmin" && <>
                                 <div className="my-5 flex items-center">
                                     <label className="font-semibold text-xl text-gray-700 w-36">الدور الحالى</label>
@@ -132,15 +171,6 @@ const UsersView = () => {
                                             onClick={() => { setFormState(true); setSelectedRole('') }}>
                                             اللغاء
                                         </button>}
-                                        {sucess && <Message className=" border-teal-800 text-teal-950 bg-teal-100 p-2 border-r-8 mt-4 w-fit shadow"
-                                            severity="info"
-                                            content={
-                                                <div className="flex justify-start items-center">
-                                                    <i className='pi pi-check-circle text-3xl mx-5'></i>
-                                                    <div className="ml-2">تم تعديل الدور بنجاح</div>
-                                                </div>
-                                            }
-                                        />}
                                     </div>
                                 </form>
                             </>}
@@ -149,15 +179,15 @@ const UsersView = () => {
                         <div>
                             <div className="mb-6 flex flex-col object-fill">
                                 <label className="font-semibold text-2xl mb-2 text-gray-700">صورة شخصيه</label>
-                                <Image src={person.profilePic ? `http://localhost:5231/users/PI/${person.profilePic}` : `/img/defaultProfile.webp`} alt="الشخصيه" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
+                                <Image src={person.profilePic ? `http://hotelkfs.runasp.net/users/PI/${person.profilePic}` : `/img/defaultProfile.webp`} alt="الشخصيه" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
                             </div>
                             <div className="mb-6 flex flex-col object-fill">
                                 <label className="font-semibold text-2xl mb-2 text-gray-700">صورة الهوية (الواجهة)</label>
-                                <Image src={`http://localhost:5231/users/NI/${person.nationalPicFront}`} alt="الواجهة" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
+                                <Image src={`http://hotelkfs.runasp.net/users/NI/${person.nationalPicFront}`} alt="الواجهة" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
                             </div>
                             <div className="mb-6 flex flex-col object-fill">
                                 <label className="font-semibold text-2xl mb-2 text-gray-700">صورة الهوية (الخلفية)</label>
-                                <Image src={`http://localhost:5231/users/NI/${person.nationalPicBack}`} alt="الخلفية" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
+                                <Image src={`http://hotelkfs.runasp.net/users/NI/${person.nationalPicBack}`} alt="الخلفية" className="border border-gray-300 shadow-sm object-contain max-h-64" preview />
                             </div>
                         </div>
                     </div>

@@ -10,7 +10,7 @@ const RoomsAdd = () => {
     const labelStyle = `block tracking-wide text-grey-darker text-xl font-bold mb-2 ms-1`;
     const [ragions, setRagions] = useState();
     useEffect(() => {
-        fetch('/api/HotelRegions').then(res => res.json()).then((data) => {
+        fetch('http://hotelkfs.runasp.net/api/HotelRegions').then(res => res.json()).then((data) => {
             setRagions(data);
         }).catch((err) => console.log(err));
     }, []);
@@ -51,7 +51,7 @@ const RoomsAdd = () => {
         images.forEach(file => {
             data.append("Images", file);
         });
-        fetch('/api/Rooms/AddRoom', {
+        fetch('http://hotelkfs.runasp.net/api/Rooms/AddRoom', {
             method: "POST",
             headers: {
                 "authorization": `Bearer ${token}`

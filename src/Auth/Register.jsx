@@ -9,7 +9,7 @@ const Register = () => {
     const [errors, setErrors] = useState({});
     const [allRegions, setAllRegions] = useState([]);
     useEffect(() => {
-        fetch('/api/HotelRegions').then(res => res.json()).then(data => {
+        fetch('http://hotelkfs.runasp.net/api/HotelRegions').then(res => res.json()).then(data => {
             setAllRegions(data);
         }).catch(err => console.error(err));
     }, [])
@@ -21,14 +21,35 @@ const Register = () => {
     const [isEmployee, setIsEmployee] = useState(false);
     const [Password, setPassword] = useState('');
     const [confPassword, setConfPassword] = useState('');
-    const confPasswordHadel = (e) => {
-        if (e.target.value !== Password) {
-            setErrors({ ...errors, ConfPass: "كلمة المرور غير مطابقه" })
+
+    const handlePasswordChange = (e) => {
+        const value = e.target.value;
+        setPassword(value);
+
+        if (value.length < 8) {
+            setErrors((prevErrors) => ({ ...prevErrors, Password: 'تأكد من ملء الحقل على الاقل 8 حروف او ارقام' }));
         } else {
-            setErrors({ ...errors, ConfPass: null })
+            setErrors((prevErrors) => ({ ...prevErrors, Password: null }));
         }
-        setConfPassword(e.target.value);
-    }
+
+        // Revalidate confirm Password if it's already been filled
+        if (confPassword && confPassword !== value) {
+            setErrors((prevErrors) => ({ ...prevErrors, confPass: 'كلمة المرور غير مطابقه' }));
+        } else {
+            setErrors((prevErrors) => ({ ...prevErrors, confPass: null }));
+        }
+    };
+    const handleConfPasswordChange = (e) => {
+        const value = e.target.value;
+        setConfPassword(value);
+
+        if (value !== Password) {
+            setErrors((prevErrors) => ({ ...prevErrors, confPass: 'كلمة المرور غير مطابقه' }));
+        } else {
+            setErrors((prevErrors) => ({ ...prevErrors, confPass: null }));
+        }
+    };
+
     const [selectedGender, setSelectedGender] = useState('');
     const handleGenderChange = (event) => {
         setSelectedGender(event.target.value);
@@ -56,6 +77,10 @@ const Register = () => {
     const { login } = useAuthContext();
     const handelSubmit = (e) => {
         e.preventDefault();
+        if (Password != confPassword) {
+            setErrors((prevErrors) => ({ ...prevErrors, confPass: 'كلمة المرور غير مطابقه' }));
+            return;
+        }
         setIsSubmitting(true);
         const SForm = new FormData();
         SForm.append('FullName', FullName);
@@ -63,7 +88,7 @@ const Register = () => {
         SForm.append('Password', Password);
         SForm.append('Gender', selectedGender);
         SForm.append('NationalId', NationalId);
-        SForm.append('IsEmployee',isEmployee);
+        SForm.append('IsEmployee', isEmployee);
         SForm.append('RegionId', region);
         SForm.append('ProfilePic', profile);
         SForm.append('NationalIdPicFront', front);
@@ -71,7 +96,7 @@ const Register = () => {
         SForm.append('Address', Address);
         SForm.append('PhoneNumber', PhoneNumber);
 
-        fetch('/api/HotelAuth/register', {
+        fetch('http://hotelkfs.runasp.net/api/HotelAuth/register', {
             method: "POST",
             body: SForm
         }).then(res => res.json()).then((data) => {
@@ -197,7 +222,7 @@ const Register = () => {
                             </label>
                             <input className={inputStyle} id="grid-area" type="text"
                                 value={area} onChange={(e) => setArea(e.target.value)} />
-                            {errors.region && <p className="text-red-500 text-sm m-1 mb-3 tracking-wider">{errors.region}</p>}                    
+                            {errors.region && <p className="text-red-500 text-sm m-1 mb-3 tracking-wider">{errors.region}</p>}
                         </div>
                         <div className="md:w-1/2 mb-2 px-3">
                             <label className={labelStyle} htmlFor="grid-street">
@@ -302,25 +327,38 @@ const Register = () => {
                     {/* Password */}
                     <div className="-mx-3 md:flex mb-3">
                         <div className="md:w-full px-3">
-                            <label className={labelStyle} htmlFor="grid-password">
+                            <label className={labelStyle} htmlFor="grid-Password">
                                 كلمة المرور
                             </label>
-                            <input className={inputStyle} id="grid-password" type="password" placeholder="*******" value={Password} onChange={(e) => setPassword(e.target.value)} />
-                            {errors.Password && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من ملء الحقل على الاقل 8 حروف او ارقام</p>}
-                            {errors.password && <p className="text-red-500 text-sm m-1 tracking-wider">تأكد من ملء الحقل على الاقل 8 حروف او ارقام</p>}
+                            <input
+                                className={inputStyle}
+                                id="grid-Password"
+                                type="Password"
+                                placeholder="*******"
+                                value={Password}
+                                onChange={handlePasswordChange}
+                            />
+                            {errors.Password && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.Password}</p>}
                         </div>
                     </div>
+
                     {/* Confirm Password */}
                     <div className="-mx-3 md:flex mb-6">
                         <div className="md:w-full px-3">
-                            <label className={labelStyle} htmlFor="grid-cof-password">
-                                نأكيد كلمة المرور
+                            <label className={labelStyle} htmlFor="grid-conf-Password">
+                                تأكيد كلمة المرور
                             </label>
-                            <input className={inputStyle} id="grid-cof-password" type="password" placeholder="*******" value={confPassword} onChange={(e) => confPasswordHadel(e)} />
-                            {errors.ConfPass && <p className="text-red-500 text-sm m-1 tracking-wider"> {errors.ConfPass} </p>}
+                            <input
+                                className={inputStyle}
+                                id="grid-conf-Password"
+                                type="Password"
+                                placeholder="*******"
+                                value={confPassword}
+                                onChange={handleConfPasswordChange}
+                            />
+                            {errors.confPass && <p className="text-red-500 text-sm m-1 tracking-wider">{errors.confPass}</p>}
                         </div>
-                    </div>
-                    <button disabled={isSubmitting}
+                    </div>                    <button disabled={isSubmitting}
                         className="flex w-full justify-center rounded-md bg-prime shadow px-3 py-3 text-sm font-semibold leading-6 text-white hover:bg-prime-h focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" type="submit">
                         {
                             !isSubmitting ? "سجل الان" : <i className='pi pi-spin pi-spinner text-lg'></i>

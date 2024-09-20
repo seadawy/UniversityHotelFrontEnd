@@ -9,7 +9,7 @@ const UsersManage = () => {
     const [UsersFilter, setUsersFilter] = useState([]);
 
     useEffect(() => {
-        fetch('/api/HotelAuth/allUsers', {
+        fetch('http://hotelkfs.runasp.net/api/HotelAuth/allUsers', {
             headers: {
                 "Authorization": `Bearer ${token}`
             }

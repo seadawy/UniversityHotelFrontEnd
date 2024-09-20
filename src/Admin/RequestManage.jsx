@@ -27,38 +27,38 @@ export default function RequestManage() {
     }, []);
 
     const fetchWaiting = () => {
-        fetch('/api/BookRequests/RequestsWaitingToApproved', {
+        fetch('http://hotelkfs.runasp.net/api/BookRequests/RequestsWaitingToApproved', {
             headers: { "authorization": `Bearer ${token}` }
         }).then(res => res.json()).then(data => setWaiting(data)).catch(err => console.log(err));
     };
 
     const fetchAccepted = () => {
-        fetch('/api/BookRequests/ApprovedRequests', {
+        fetch('http://hotelkfs.runasp.net/api/BookRequests/ApprovedRequests', {
             headers: { "authorization": `Bearer ${token}` }
         }).then(res => res.json()).then(data => setAccepted(data)).catch(err => console.log(err));
     };
 
     const fetchCheckIn = () => {
-        fetch('/api/BookRequests/CheckinRequests', {
+        fetch('http://hotelkfs.runasp.net/api/BookRequests/CheckinRequests', {
             headers: { "authorization": `Bearer ${token}` }
         }).then(res => res.json()).then(data => setCheckIn(data)).catch(err => console.log(err));
     };
 
     const fetchCheckOut = () => {
-        fetch('/api/BookRequests/CheckoutRequests', {
+        fetch('http://hotelkfs.runasp.net/api/BookRequests/CheckoutRequests', {
             headers: { "authorization": `Bearer ${token}` }
         }).then(res => res.json()).then(data => setCheckOut(data)).catch(err => console.log(err));
     };
 
     const fetchRejected = () => {
-        fetch('/api/BookRequests/RejectedRequests', {
+        fetch('http://hotelkfs.runasp.net/api/BookRequests/RejectedRequests', {
             headers: { "authorization": `Bearer ${token}` }
         }).then(res => res.json()).then(data => setRejected(data)).catch(err => console.log(err));
     };
 
     /* Actions */
     const RejectRequest = (Reqid) => {
-        fetch(`/api/BookRequests/RejectBookRequest/${Reqid}`, {
+        fetch(`http://hotelkfs.runasp.net/api/BookRequests/RejectBookRequest/${Reqid}`, {
             method: "put",
             headers: { "Authorization": `bearer ${token}` }
         }).then(() => {
@@ -68,7 +68,7 @@ export default function RequestManage() {
     };
 
     const AcceptRequest = (Reqid) => {
-        fetch(`/api/BookRequests/ApproveRequest/${Reqid}`, {
+        fetch(`http://hotelkfs.runasp.net/api/BookRequests/ApproveRequest/${Reqid}`, {
             method: "put",
             headers: { "Authorization": `bearer ${token}` }
         }).then(() => {
@@ -78,7 +78,7 @@ export default function RequestManage() {
     };
 
     const CheckInRequest = (Reqid) => {
-        fetch(`/api/BookRequests/CheckinBookRequest/${Reqid}`, {
+        fetch(`http://hotelkfs.runasp.net/api/BookRequests/CheckinBookRequest/${Reqid}`, {
             method: "put",
             headers: { "Authorization": `bearer ${token}` }
         }).then(() => {
@@ -88,7 +88,7 @@ export default function RequestManage() {
     };
 
     const CheckOutRequest = (Reqid) => {
-        fetch(`/api/BookRequests/CheckoutBookRequest/${Reqid}`, {
+        fetch(`http://hotelkfs.runasp.net/api/BookRequests/CheckoutBookRequest/${Reqid}`, {
             method: "put",
             headers: { "Authorization": `bearer ${token}` }
         }).then(() => {

@@ -8,7 +8,7 @@ export default function Requests() {
     const { token } = useAuthContext();
     const [requests, setRequests] = useState([]);
     const fetchReq = () => {
-        fetch('/api/BookRequests/GetUserBooks', {
+        fetch('http://hotelkfs.runasp.net/api/BookRequests/GetUserBooks', {
             headers: {
                 "authorization": `Bearer ${token}`
             },
@@ -51,7 +51,7 @@ export default function Requests() {
     );
 
     const CancelReq = (id) => {
-        fetch(`/api/BookRequests/CancelBookRequest/${id}`, {
+        fetch(`http://hotelkfs.runasp.net/api/BookRequests/CancelBookRequest/${id}`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`

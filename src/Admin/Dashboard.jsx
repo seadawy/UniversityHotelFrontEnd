@@ -33,29 +33,29 @@ const Dashboard = () => {
     });
 
     useEffect(() => {
-        fetch('/api/HotelAuth/CountOfUsers', {
+        fetch('http://hotelkfs.runasp.net/api/HotelAuth/CountOfUsers', {
             headers: {
                 "authorization": `Bearer ${token}`
             }
         }).then(res => res.json()).then(data => setNUser(data));
 
-        fetch('/api/BookRequests/GetWaitingRequests', {
+        fetch('http://hotelkfs.runasp.net/api/BookRequests/GetWaitingRequests', {
             headers: {
                 "authorization": `Bearer ${token}`
             }
         }).then(res => res.json()).then(data => setNReq(data));
 
-        fetch('/api/Complaints/NumberOfComplaints', {
+        fetch('http://hotelkfs.runasp.net/api/Complaints/NumberOfComplaints', {
             headers: {
                 "authorization": `Bearer ${token}`
             }
         }).then(res => res.json()).then(data => setNComp(data));
 
-        fetch('/api/Statistics/roomsStatus').then(res => res.json()).then(data => {
+        fetch('http://hotelkfs.runasp.net/api/Statistics/roomsStatus').then(res => res.json()).then(data => {
             setRoomStatus(data);
         }).catch(err => console.log(err));
 
-        fetch('/api/Statistics/lastMonthBooksStatistics').then(res => res.json()).then(data => {
+        fetch('http://hotelkfs.runasp.net/api/Statistics/lastMonthBooksStatistics').then(res => res.json()).then(data => {
             const labels = data.map(item => item.bookDate);
             const booksData = data.map(item => item.books);
             setMonthBooks({
@@ -64,11 +64,11 @@ const Dashboard = () => {
             });
         }).catch(err => console.log(err));
 
-        fetch('/api/Statistics/lastMonthStatistics').then(res => res.json()).then(data => {
+        fetch('http://hotelkfs.runasp.net/api/Statistics/lastMonthStatistics').then(res => res.json()).then(data => {
             setStatistics(data);
         }).catch(err => console.log(err));
 
-        fetch('/api/Statistics/lastMonthRevenueStatistics', {
+        fetch('http://hotelkfs.runasp.net/api/Statistics/lastMonthRevenueStatistics', {
             headers: {
                 "authorization": `Bearer ${token}`
             }
@@ -81,7 +81,7 @@ const Dashboard = () => {
             });
         }).catch(err => console.log(err));
 
-        fetch('/api/Statistics/lastMonthRevenueQuarterStatistics', {
+        fetch('http://hotelkfs.runasp.net/api/Statistics/lastMonthRevenueQuarterStatistics', {
             headers: {
                 "authorization": `Bearer ${token}`
             }
@@ -94,7 +94,7 @@ const Dashboard = () => {
             });
         }).catch(err => console.log(err));
 
-        fetch('/api/Statistics/lastYearRevenueQuarterStatistics', {
+        fetch('http://hotelkfs.runasp.net/api/Statistics/lastYearRevenueQuarterStatistics', {
             headers: {
                 "authorization": `Bearer ${token}`
             }

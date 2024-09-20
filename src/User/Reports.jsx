@@ -22,7 +22,7 @@ const Reports = () => {
             "title": title,
             "description": description,
         }
-        fetch('/api/Complaints', {
+        fetch('http://hotelkfs.runasp.net/api/Complaints', {
             method: "post",
             headers: {
                 "content-type": "application/json"

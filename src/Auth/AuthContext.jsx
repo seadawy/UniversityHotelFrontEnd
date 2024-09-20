@@ -27,7 +27,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const [refresh, setRefresh] = useState(false);
     const login = (currentToken) => {
-        fetch('/api/HotelAuth/user', {
+        fetch('http://hotelkfs.runasp.net/api/HotelAuth/user', {
             headers: {
                 Authorization: `Bearer ${currentToken}`
             }

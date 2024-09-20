@@ -18,7 +18,7 @@ export default function RoomDetails() {
     const [invalidDates, setInvalidDates] = useState([])
     const { id } = useParams();
     useEffect(() => {
-        fetch(`/api/Rooms/${id}`).then(res => res.json()).then(data => {
+        fetch(`http://hotelkfs.runasp.net/api/Rooms/${id}`).then(res => res.json()).then(data => {
             setRoom(data)
             setPrice(user.isEmployee ? data.stuffPrice : data.guestPrice);
             const dateObjects = data.roomTimes.map(dateString => new Date(dateString));
@@ -30,7 +30,7 @@ export default function RoomDetails() {
         return (
             <div className='h-full w-full overflow-hidden flex justify-center items-center'>
                 <img
-                    src={`http://localhost:5231/Rooms/Images/${item.image}`}
+                    src={`http://hotelkfs.runasp.net/Rooms/Images/${item.image}`}
                     className='h-full w-full object-cover rounded-md'
                     alt={item.id}
                     style={{ display: 'block' }}
@@ -54,8 +54,19 @@ export default function RoomDetails() {
     // Calculate the number of days between two dates
     const calculateDays = (from, to) => {
         if (!from || !to) return 0;
-        const diffTime = Math.abs(to - from);
-        return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    
+        // Normalize the dates by setting the time to midnight
+        const normalizedFrom = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+        const normalizedTo = new Date(to.getFullYear(), to.getMonth(), to.getDate());
+    
+        // Calculate the difference in time between the normalized dates
+        const diffTime = Math.abs(normalizedTo - normalizedFrom);
+    
+        // Calculate the number of days between the two dates
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+        // If the normalized dates are the same, count it as one day
+        return normalizedFrom.getTime() === normalizedTo.getTime() ? 1 : diffDays + 1;
     };
 
     // Update the bill whenever the date range or price changes
@@ -87,7 +98,7 @@ export default function RoomDetails() {
             "startDate": formatDateForRequest(dateRange[0]),
             "endDate": formatDateForRequest(dateRange[1])
         }
-        fetch('/api/BookRequests/AddBookRequest', {
+        fetch('http://hotelkfs.runasp.net/api/BookRequests/AddBookRequest', {
             method: 'post', headers: {
                 "authorization": `Bearer ${token}`,
                 "content-type": 'application/json'
@@ -273,6 +284,7 @@ export default function RoomDetails() {
                         </div>
                         <div className="w-full lg:w-4/6">
                             <Calendar
+                                dateFormat="dd/mm/yy"
                                 className="w-full"
                                 minDate={today}
                                 value={dateRange}

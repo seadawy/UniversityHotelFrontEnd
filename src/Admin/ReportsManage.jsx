@@ -8,7 +8,7 @@ const ReportsManage = () => {
     const [expandedRow, setExpandedRow] = useState(null); // Track expanded row
 
     const getComp = () => {
-        fetch('/api/Complaints', {
+        fetch('http://hotelkfs.runasp.net/api/Complaints', {
             headers: {
                 "authorization": `Bearer ${token}`
             }
@@ -22,7 +22,7 @@ const ReportsManage = () => {
     }, [token]);
 
     const hadelSolve = (id) => {
-        fetch(`/api/Complaints/SolveOrNotSolve/${id}`, {
+        fetch(`http://hotelkfs.runasp.net/api/Complaints/SolveOrNotSolve/${id}`, {
             method: "put",
             headers: {
                 "authorization": `bearer ${token}`

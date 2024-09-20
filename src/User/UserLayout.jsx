@@ -12,7 +12,7 @@ const UserLayout = () => {
 
             <div className="w-full sm:flex sm:flex-1">
                 {user && (<SidebarComponent />)}
-                <main className={`w-full bg-gray-100 ${user ? '' : 'mt-28'}`}>
+                <main className={`w-full bg-gray-100 ${user ? '' : 'mt-24'}`}>
                     <Outlet />
                 </main>
             </div>
@@ -29,9 +29,6 @@ const UserLayout = () => {
                         </div>
                         <div className="flex flex-col items-start">
                             <h1 className="mt-1 text-2xl"> <strong>تحت اشراف</strong></h1>
-                            <li>
-                                استاذ مساعد دكتور احمد العشرى
-                            </li>
                             <li>
                                 مدرس مساعد مهندس محمد فتح الله
                             </li>

@@ -27,7 +27,7 @@ const AdminLayout = () => {
                     <div className="h-full px-3 pb-4 overflow-y-auto bg-slider">
                         <ul className="space-y-2 font-medium sticky">
                             <center>
-                                <img src={user.profilePic ? `http://localhost:5231/users/PI/${user.profilePic}` : `/img/defaultProfile.webp`} alt="الشخصيه" className="rounded-full border-4 shadow-lg border-prime-h object-cover w-32 h-32 mb-2" />
+                                <img src={user.profilePic ? `http://hotelkfs.runasp.net/users/PI/${user.profilePic}` : `/img/defaultProfile.webp`} alt="الشخصيه" className="rounded-full border-4 shadow-lg border-prime-h object-cover w-32 h-32 mb-2" />
                                 <h1 className="text-center">{user.fullName}</h1>
                                 <h1 className="text-center text-sm bg-yellow-400 shadow-sm text-gray-500 w-fit mt-1 p-1 px-2 rounded-full">{user.role}</h1>
                             </center>
@@ -106,9 +106,6 @@ const AdminLayout = () => {
                                 </div>
                                 <div className="flex flex-col items-start">
                                     <h1 className="mt-1 text-2xl"> <strong>تحت اشراف</strong></h1>
-                                    <li>
-                                        استاذ مساعد دكتور احمد العشرى
-                                    </li>
                                     <li>
                                         مدرس مساعد مهندس محمد فتح الله
                                     </li>

@@ -17,6 +17,7 @@ export default function Profile() {
     const [Email, setEmail] = useState('');
     const [PhoneNumber, setPhoneNumber] = useState('');
     const [Address, setAddress] = useState('');
+    const [isEmployee, setIsEmployee] = useState(false);
 
     // National information
     const [NationalId, setNationalId] = useState('');
@@ -29,13 +30,14 @@ export default function Profile() {
         setFullName(user.fullName);
         setEmail(user.email);
         setPhoneNumber(user.phoneNumber);
+        setIsEmployee(user.isEmployee);
         setAddress(user.address);
 
         // National information
         setNationalId(user.nationalId);
-        setProfile(`http://localhost:5231/Users/PI/${user.profilePic}`);
-        setFront(`http://localhost:5231/Users/NI/${user.nationalPicFront}`);
-        setBack(`http://localhost:5231/Users/NI/${user.nationalPicBack}`);
+        setProfile(`http://hotelkfs.runasp.net/Users/PI/${user.profilePic}`);
+        setFront(`http://hotelkfs.runasp.net/Users/NI/${user.nationalPicFront}`);
+        setBack(`http://hotelkfs.runasp.net/Users/NI/${user.nationalPicBack}`);
     }, [personalState, nationalState, user]);
 
     const [errors, setErrors] = useState({});
@@ -48,7 +50,7 @@ export default function Profile() {
         data.append("PhoneNumber", PhoneNumber);
         data.append("Address", Address);
 
-        fetch('/api/HotelAuth/updateUserData', {
+        fetch('http://hotelkfs.runasp.net/api/HotelAuth/updateUserData', {
             method: 'PUT',
             headers: {
                 "authorization": `Bearer ${token}`
@@ -68,7 +70,7 @@ export default function Profile() {
         data.append('NationalIdPicFront', front);
         data.append('NationalIdPicBack', back);
 
-        fetch('/api/HotelAuth/updateNationalData', {
+        fetch('http://hotelkfs.runasp.net/api/HotelAuth/updateNationalData', {
             method: 'PUT',
             headers: {
                 "authorization": `Bearer ${token}`
@@ -229,11 +231,23 @@ export default function Profile() {
                                 disabled={personalState}
                             />
                         </div>
+                        {/*  <div className="mb-4 sm:mb-6">
+                            <div className="-mx-2 md:flex my-3">
+                                <div className="md:w-full px-3 flex gap-2 items-center flex-row">
+                                    <input type="checkbox" name="employee" id="employee" checked={isEmployee} value={isEmployee} onChange={() => setIsEmployee(!isEmployee)}
+                                        disabled={personalState} className='w-12 h-12 me-2' />
+                                    <label htmlFor="employee" className='text-xl'>
+                                        موظف بالجامعه
+                                        <p className='text-base text-gray-500'>يتم تحديد الاسعار بناء على هذا الاختيار</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div> */}
                         <div className='flex flex-row-reverse gap-3'>
                             <button
                                 type={(personalState ? 'submit' : 'button')}
                                 className="text-white bg-prime-h hover:bg-prime-lh focus:ring-4 focus:outline-none float-end
-                            focus:ring-blue-700-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mb-5"
+                                focus:ring-blue-700-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mb-5"
                                 onClick={() => setPersonalState(!personalState)}
                             >
                                 {personalState ? (<><i className='pi pi-pen-to-square'></i> تعديل</>) : (<><i className='pi pi-save'></i> حفظ</>)}

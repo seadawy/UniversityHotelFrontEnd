@@ -25,7 +25,7 @@ import RoomsManage from './Admin/RoomsManage';
 import ReportsManage from './Admin/ReportsManage';
 
 function App() {
-  const { user, token } = useAuthContext();
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

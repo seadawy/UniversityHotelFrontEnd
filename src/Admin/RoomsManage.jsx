@@ -13,7 +13,7 @@ const RoomsManage = () => {
     const [selectedRoomId, setSelectedRoomId] = useState(null);
 
     useEffect(() => {
-        fetch('/api/Rooms')
+        fetch('http://hotelkfs.runasp.net/api/Rooms')
             .then(res => res.json())
             .then((data) => {
                 setRooms(data);
@@ -64,7 +64,7 @@ const RoomsManage = () => {
     }
 
     const triggerDel = () => {
-        fetch(`/api/Rooms/DeleteRoom/${selectedRoomId}`, {
+        fetch(`http://hotelkfs.runasp.net/api/Rooms/DeleteRoom/${selectedRoomId}`, {
             method: "DELETE",
             headers: {
                 "authorization": `Bearer ${token}`
